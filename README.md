@@ -85,7 +85,7 @@ Puedes encontrar mucho más de cómo utilizar este proyecto en nuestra [Wiki](ht
 Usamos [SemVer](http://semver.org/) para el versionado. Para todas las versiones disponibles, mira los [tags en este repositorio](https://github.com/tu/proyecto/tags).
 
 ## Autores ✒️
-* **Mauricio Urriola** - *Desarrollador* - [villanuevand](https://github.com/jmauricio9911)
+* **Mauricio Urriola** - *Desarrollador* - [josezabaleta99](https://github.com/jmauricio9911)
 * **Diego** - *Desarrollador* - [fulanitodetal](#fulanito-de-tal)
 * **Santiago** - *Desarrollador* - [fulanitodetal](#fulanito-de-tal)
 
