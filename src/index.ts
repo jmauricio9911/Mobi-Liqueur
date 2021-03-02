@@ -3,7 +3,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 
 import indexRoutes from './routes/indexRoutes';
-import gamesRoutes from './routes/gamesRoutes';
+import productosRoutes from './routes/ProductosRoutes';
 
 class Server {
 
@@ -26,7 +26,7 @@ class Server {
     //Configuracion de rutas del servidor Microservicios.
     routes(): void {
         this.app.use('/', indexRoutes);
-        this.app.use('/api/games', gamesRoutes);
+        this.app.use('/api/mobiLiqueur', productosRoutes);
     }
 
     start() {
