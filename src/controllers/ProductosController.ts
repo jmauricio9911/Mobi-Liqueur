@@ -6,8 +6,8 @@ import pool from '../database';
 class GamesController {
 
     public async list(req: Request, res: Response): Promise<void> {
-        const games = await pool.query('SELECT * FROM producto');
-        res.json(games);
+        const productos = await pool.query('SELECT * FROM producto');
+        res.json(productos);
     }
 
     public async getOne(req: Request, res: Response): Promise<any> {
