@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html ng-app="app.modulo" lang="es">
+
+<head>
+
+    <title>Mobi-Liqueur</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--ICONO-->
+    <link rel="icon" type="image/x-icon" href="../public/resources/favicon2.ico" />
+
+    <!-- BOOTSTRAP-->
+    <link rel="stylesheet" href="app/vendor/bootstrap-3.4.1-dist/css/bootstrap.min.css">
+
+    <!--STYLES-->
+    <link rel="stylesheet" href="app/styles/singIn.css">
+    <link rel="stylesheet" href="app/styles/index.css">
+
+    <!--AngularJS-->
+    <script src="app/vendor/angularjs/1.2.32/angular.min.js"></script>
+    <script src="app/vendor/angularjs/1.2.32/angular-route.js"></script>
+
+    <!--SWEET ALERT-->
+    <script src="app/vendor/sweetalert/2.1.2/sweetalert.min.js"></script>
+
+    <!-- APP: MODULOS Y CONFIGURACION-->
+    <script src="app/config/config.js"></script>
+    <script src="app/config/modulo.js"></script>
+
+    <script src="app/controllers/lib/functions.js"></script>
+
+    <!--CONTROLADORES-->
+    <script src="app/controllers/headquarters.js"></script>
+    <script src="app/controllers/header.js"></script>
+    <script src="app/controllers/menu.js"></script>
+    <script src="app/controllers/subMenu.js"></script>
+
+    <!--SERVICIOS-->
+    <script src="app/services/master.js"></script>
+    <script src="app/services/global.js"></script>
+
+</head>
+
+<header ng-include="'app/views/header.html'"></header>
+
+<body>
+    <div ng-view></div>
+</body>
+
+</html>
