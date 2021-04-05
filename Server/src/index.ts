@@ -4,7 +4,7 @@ import cors from 'cors';
 
 import indexRoutes from './routes/indexRoutes';
 import productosRoutes from './routes/ProductosRoutes';
-
+import promotionsRoutes from './routes/PromotionsRouter';
 class Server {
 
     public app: Application;
@@ -26,7 +26,8 @@ class Server {
     //Configuracion de rutas del servidor Microservicios.
     routes(): void {
         this.app.use('/', indexRoutes);
-        this.app.use('/api/mobiLiqueur', productosRoutes);
+        this.app.use('/api/products', productosRoutes);//Api productos
+        this.app.use('/api/promotions', promotionsRoutes);//Api promosiones
     }
 
     start() {
