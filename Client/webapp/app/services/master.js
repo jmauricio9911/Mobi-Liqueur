@@ -25,7 +25,12 @@ function masterData($http) {
         getHeadquartersByID: getHeadquartersByID,
         getHeadquarters: getHeadquarters,
         getData: getData,
-        send: send
+        send: send,
+        getPromotions: getPromotions,
+        getPromotionsOne: getPromotionsOne,
+        DeletePromotions: DeletePromotions,
+        UpdatePromotions: UpdatePromotions,
+        CreatePromotions: CreatePromotions
     };
     return service;
 
@@ -37,18 +42,47 @@ function masterData($http) {
         return getDataById("/api/headquarters/search/findByID?id=", urlHeadquarters);
     }
 
+    function getPromotions() {
+        return getData("api/promotions");
+    }
+
+    function getPromotionsOne(id) {
+        return getData(`api/promotions/${id}`);
+    }
+
+    function DeletePromotions(id) {
+        return getData(`api/promotions/${id}`);
+    }
+
+    function UpdatePromotions(id, json) {
+
+        var object = {
+            "Descuento": json.Descuento,
+            "FechaInicio": json.FechaInicio,
+            "FechaFin": json.FechaFin,
+            "Estado": json.Estado,
+            // "Producto_idProducto": json1111
+        }
+        return UpdateData(`api/promotions/${id}`, object);
+
+    }
+
+    function CreatePromotions(json) {
+        return send(`api/promotions`, json);
+    }
+
     /**
-    * @function getData
-    * @description Obtener datos de un recurso
-    * @param {String} resource Recurso del cual se desea obtener datos
-    */
+     * @function getData
+     * @description Obtener datos de un recurso
+     * @param {String} resource Recurso del cual se desea obtener datos
+     */
     function getData(resource) {
         return $http({
             method: 'GET',
             url: URL + resource
-        }).success(function (response, status, headers, config) {
+        }).success(function(response, status, headers, config) {
             return response;
-        }).error(function (response, status, headers, config) {
+        }).error(function(response, status, headers, config) {
             abort(status);
         });
     }
@@ -63,9 +97,9 @@ function masterData($http) {
         return $http({
             method: 'GET',
             url: URL + resource + url_ID
-        }).success(function (response, status, headers, config) {
+        }).success(function(response, status, headers, config) {
             return response;
-        }).error(function (response, status, headers, config) {
+        }).error(function(response, status, headers, config) {
             abort(status);
         });
     }
@@ -81,15 +115,27 @@ function masterData($http) {
             url: URL + resource,
             method: "POST",
             data: json
-        }).success(function (data, status, headers, config) {
+        }).success(function(data, status, headers, config) {
             return data;
-        }).error(function (data, status, headers, config) {
+        }).error(function(data, status, headers, config) {
             swal(
                 `ERROR ${status}`,
                 "Ocurrió un error con el servicio.",
                 "error"
             );
             return data;
+        });
+    }
+
+    function UpdateData(resource, json) {
+        return $http({
+            url: URL + resource,
+            method: "PUT",
+            data: json
+        }).success(function(response, status, headers, config) {
+            return response;
+        }).error(function(response, status, headers, config) {
+            abort(status);
         });
     }
 
