@@ -1,3 +1,14 @@
+/**
+ *------------------------------------------------------------------------------------------------------
+ * 																									   |
+ *                          FUNCIONES - New Inntech                                                    |
+ *      @author:                                       									               |
+ *      @author:          Sebastian Cardona Loaiza	sebastian.cardona@gruponetw.com					   |
+ *      @FECHA:           30 Marzo de 2020                                                             |
+ *      @description:     Funciones utiles procesar datos                                              |
+ *_____________________________________________________________________________________________________| */
+
+
 //Validar si un string contiene solo números
 function expNumber(numero) {
     var regex = /^([0-9])*$/;

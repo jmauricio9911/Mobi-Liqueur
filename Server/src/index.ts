@@ -4,7 +4,13 @@ import cors from 'cors';
 
 import indexRoutes from './routes/indexRoutes';
 import productosRoutes from './routes/ProductosRoutes';
-import promotionsRoutes from './routes/PromotionsRouter';
+import userRoutes from './routes/userRoutes';
+import rolRoutes from './routes/rolRoutes';
+import clienteRoutes from './routes/clienteRoutes';
+import comboRoutes from './routes/comboRoutes';
+import promotionRoutes from './routes/promocionRoutes';
+import ventaRoutes from './routes/ventaRoutes';
+
 class Server {
 
     public app: Application;
@@ -26,8 +32,13 @@ class Server {
     //Configuracion de rutas del servidor Microservicios.
     routes(): void {
         this.app.use('/', indexRoutes);
-        this.app.use('/api/products', productosRoutes);//Api productos
-        this.app.use('/api/promotions', promotionsRoutes);//Api promosiones
+        this.app.use('/api/producto', productosRoutes);
+        this.app.use('/api/user', userRoutes);
+        this.app.use('/api/cliente', clienteRoutes);
+        this.app.use('/api/rol', rolRoutes);
+        this.app.use('/api/venta', ventaRoutes);
+        this.app.use('/api/promocion', promotionRoutes);
+        this.app.use('/api/combo', comboRoutes);
     }
 
     start() {

@@ -18,16 +18,21 @@ function config($routeProvider) {
             templateUrl: 'app/views/menu.html',
             controller: 'cvMenu',
             controllerAs: 'vmMenu'
-        })
+        })        
         .when('/subMenu', {
             templateUrl: 'app/views/subMenu.html',
             controller: 'cvSubMenu',
             controllerAs: 'vmSubMenu'
         })
-        .when('/promosion', {
-            templateUrl: 'app/views/promotion.html',
-            controller: 'cvPromotion',
-            controllerAs: 'cvPromotion'
+        .when('/products', {
+            templateUrl: 'app/views/products.html',
+            controller: 'cvProducts',
+            controllerAs: 'vmProducts'
+        })
+        .when('/adminProducts', {
+            templateUrl: 'app/views/adminProducts.html',
+            controller: 'cvAdminProducts',
+            controllerAs: 'vmAdminProducts'
         })
         .otherwise({
             redirectTo: "/headquarters"

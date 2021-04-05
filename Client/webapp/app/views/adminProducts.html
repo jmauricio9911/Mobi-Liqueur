@@ -1,0 +1,26 @@
+<div class="container" ng-init="vmAdminProducts.init()">
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table">
+                <!-- On rows -->
+                <tr>
+                    <th>Nombre</th>
+                    <th>Cantidad</th>
+                    <th>Valor unitario</th>
+                    <th>Estado</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                </tr>
+                <!-- On cells (`td` or `th`) -->
+                <tr ng-repeat="item in vmAdminProducts.adminProducts">
+                    <td>{{item.Nombre}}</td>
+                    <td>{{item.Cantidad}}</td>
+                    <td>{{item.ValorUnitario | currency:"$":0}}</td>
+                    <td>{{item.Estado}}</td>
+                    <td><button><span class="glyphicon glyphicon-pencil"></span></button></td>
+                    <td><button><span class="glyphicon glyphicon-remove"></span></button></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

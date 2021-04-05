@@ -1,0 +1,40 @@
+<div class="container" ng-init="vmProducts.init()">
+    <div class="row">
+        <div class="col-sm-6 col-md-4" ng-repeat="item in vmProducts.products">
+            <div class="thumbnail">
+            <img src="app/img/{{item.NombreImagen}}">
+            <div class="caption">
+                <h3>{{item.Nombre}}</h3>
+                <p>{{item.ValorUnitario | currency:"$":0}}<br>
+                    Cantidad Disponible: {{item.Cantidad}}
+                </p>
+                <p>
+                    <button href="#" class="btn btn-success"  data-toggle="modal" data-target="#myModal" role="button">Agregar <span class="glyphicon glyphicon-shopping-cart"></span></button>
+                    <!-- <button class="btn btn-default" role="button">Cancelar</button> -->
+                </p>
+            </div>
+            </div>
+        </div>
+    </div>
+      
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Agregar a la compra pendiente</h4>
+            </div>
+            <div class="modal-body">
+                <label for="">Ingrese cantidad deseada</label>
+                <input class="form-control" type="number">
+                <!-- <input ng-model="model.person.name" class="form-control"> -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary">Agregar</button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
