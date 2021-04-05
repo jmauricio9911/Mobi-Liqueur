@@ -34,4 +34,5 @@ function cvHeader($scope, global) {
             $scope.name = "Ghost";
         }
     }
+
 }

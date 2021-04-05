@@ -1,25 +1,45 @@
-<div class="container-fluid" ng-controller="cvHeader" ng-init="init()">
+<div class="row" ng-controller="cvHeader" ng-init="init()">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <img class="navbar-brand" src="app/vendor/descarga.jpg">
+            </div>
 
-    <div class="col-md-6">
-        <a href="#menu">
-            <img id="logo" src="../public/resources/descarga1.png" alt="cabezote">
-        </a>
-    </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#products">Inicio<span class="sr-only">(current)</span></a></li>
+                    <li><a href="#">Pedidos pendientes <span class="badge">4</span></a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                            aria-expanded="false">
+                            Administración <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Usuarios</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#adminProducts">Productos</a></li>
+                            <li><a href="#">Combos</a></li>
+                            <li><a href="#">Promociones</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Detalle de ventas</a></li>
+                        </ul>
+                    </li>
+                </ul>
 
-    <div class="col-md-3">
-    </div>
-
-    <div class="col-md-3">
-
-        <br />
-        <span class="glyphicon glyphicon-user"></span>
-        <label>Bienvenido(a), {{name}} </label>
-
-        <p>
-            <span class="glyphicon glyphicon-off"></span>
-            <a href="../webapp/logout.html">Salida segura</a>
-        </p>
-
-    </div>
-
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span> <span class="badge">2</span></a></li>
+                    <li><a href="#">Cerrar Sesión</a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
 </div>
