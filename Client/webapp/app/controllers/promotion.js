@@ -19,6 +19,7 @@ function cvPromotion(masterData, global) {
         getPromotionsList();
         cvPromotion.getPromotionOne = getPromotionOne;
         cvPromotion.savedata = savedata;
+        validateDataTable();
     };
 
     function goToPage(page) {
