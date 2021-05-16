@@ -16,9 +16,8 @@
                 </select>
                 <br>
             </div>
-
-            <div class="table-responsive">
-                <table class="table table-bordered" id="tableProduct">
+            <table class="table table-striped" id="tableProduct">
+                <thead>    
                     <!-- On rows -->
                     <tr>
                         <th>Nombre</th>
@@ -27,19 +26,21 @@
                         <th>Estado</th>
                         <th></th>
                     </tr>
-                    <!-- On cells (`td` or `th`) -->
-                    <tr ng-repeat="item in vmAdminProducts.listProducts | filter:busqueda | orderBy:columna: reverse">
+                </thead>
+                <!-- On cells (`td` or `th`) -->
+                <tbody>
+                    <tr ng-repeat="item in vmAdminProducts.master.ListProducts | filter:busqueda | orderBy:columna: reverse">
                         <td>{{item.Nombre}}</td>
                         <td>{{item.Cantidad}}</td>
                         <td>{{item.ValorUnitario | currency:"$":0}}</td>
-                        <td><span ng-class="{'glyphicon glyphicon-remove': item.Estado == '1',
-                            'glyphicon glyphicon-ok': item.Estado == '0'}"></span></td>
-                        <td><button class="btn btn-primary" ng-click="vmAdminProducts.getAdminProductOne(item.id)">
-                            Editar
-                        </button></td>
+                        <td><span ng-class="{'glyphicon glyphicon-ok': item.Estado == '1',
+                            'glyphicon glyphicon-remove': item.Estado == '0'}"></span></td>
+                            <td><button class="btn btn-primary" ng-click="vmAdminProducts.getAdminProductOne(item.id)">
+                                Editar
+                            </button></td>
                     </tr>
-                </table>
-            </div>
+                </tbody>
+            </table>
         </div>
         <div class="col-md-4">
 

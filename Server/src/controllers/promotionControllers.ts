@@ -7,8 +7,8 @@ class PromotionController {
 
     public async list(req: Request, res: Response): Promise<void> {
         const promotions = await pool.query(`SELECT a.idPromocion, a.Descuento, a.FechaInicio, a.FechaFin, a.Estado, b.Nombre
-                                             FROM promocion as a INNER JOIN producto AS b 
-                                             on a.Producto_id = b.id`);
+                                             FROM promocion AS a INNER JOIN producto AS b 
+                                             ON a.Producto_idProducto = b.id`);
         res.json(promotions);
     }
 
