@@ -119,7 +119,7 @@ input[type=password]:focus {
     transition: 0.3s;
     min-width: 40%;
     border-radius: 5px;
-    height: 250px;
+    /* height: 250px; */
 }
 
 .thumbnail-description {

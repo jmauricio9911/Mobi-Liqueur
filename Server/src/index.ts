@@ -8,7 +8,7 @@ import userRoutes from './routes/userRoutes';
 import rolRoutes from './routes/rolRoutes';
 import clienteRoutes from './routes/clienteRoutes';
 import comboRoutes from './routes/comboRoutes';
-import promotionRoutes from './routes/promocionRoutes';
+import PromotionsRouter from './routes/PromotionsRouter';
 import ventaRoutes from './routes/ventaRoutes';
 
 class Server {
@@ -37,7 +37,7 @@ class Server {
         this.app.use('/api/cliente', clienteRoutes);
         this.app.use('/api/rol', rolRoutes);
         this.app.use('/api/venta', ventaRoutes);
-        this.app.use('/api/promocion', promotionRoutes);
+        this.app.use('/api/promotions', PromotionsRouter);
         this.app.use('/api/combo', comboRoutes);
     }
 
