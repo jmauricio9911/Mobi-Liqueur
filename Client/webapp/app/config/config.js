@@ -39,6 +39,11 @@ function config($routeProvider) {
             controller: 'cvPromotion',
             controllerAs: 'cvPromotion'
         })
+        .when('/factura', {
+            templateUrl: 'app/views/factura.html',
+            controller: 'cvFactura',
+            controllerAs: 'cvFactura'
+        })
         .otherwise({
             redirectTo: "/headquarters"
         });

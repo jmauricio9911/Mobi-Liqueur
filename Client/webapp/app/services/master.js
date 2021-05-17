@@ -102,7 +102,11 @@ function masterData($http) {
         }).success(function(response, status, headers, config) {
             return response;
         }).error(function(response, status, headers, config) {
-            abort(status);
+            swal(
+                `ERROR ${status}`,
+                "Ocurrió un error con el servicio.",
+                "error"
+            );
         });
     }
 
@@ -137,8 +141,12 @@ function masterData($http) {
         }).success(function(response, status, headers, config) {
             return response;
         }).error(function(response, status, headers, config) {
-            abort(status);
+            swal(
+                `ERROR ${status}`,
+                "Ocurrió un error con el servicio.",
+                "error"
+            );
+            return data;
         });
     }
-
 }

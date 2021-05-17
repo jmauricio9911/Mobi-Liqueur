@@ -1,0 +1,170 @@
+<div class="container" ng-init="cvFactura.init()">
+    <!-- Cuadro de busqueda -->
+    <div class="row fadeIn fast" ng-show="cliente.id === undefined">
+
+        <div class="col-sm-12">
+            <section class="panel">
+                <header class="panel-heading">
+                    Datos del Cliente
+                </header>
+                <div class="panel-body">
+                    <form name="frmBuscar" ng-submit="cvFactura.buscarCliente(buscar)">
+
+                        <div class="form-group">
+                            <label>Nombre</label>
+                            <input type="text" class="form-control" placeholder="Nombre" ng-model="buscar" autofocus required>
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </section>
+        </div>
+
+    </div>
+
+
+
+    <!-- Primera parte de la factura -->
+
+    <section class="invoice fadeIn fast" ng-hide="cvFactura.detallefac">
+
+        <!-- title row -->
+        <div class="row">
+            <div class="col-xs-12">
+                <h2 class="page-header">
+                    <i class="fa fa-globe"></i> {{ cvFactura.config.aplicativo }} - {{ cvFactura.config.Iniiniciales }}
+                    <small class="pull-right">Fecha: {{ cvFactura.hoy | date:'dd-MM-yyyy' }}</small>
+                </h2>
+            </div>
+            <!-- /.col -->
+        </div>
+
+        <!-- info row -->
+        <div class="row invoice-info">
+
+            <div class="col-sm-4 invoice-col">
+                De
+                <address>
+                <strong>{{ cvFactura.config.aplicativo }} - {{ cvFactura.config.Iniiniciales  }}</strong><br>
+                {{ cvFactura.config.direccion }}
+                Teléfono: {{ cvFactura.config.telefono }}<br>
+                Email: {{ cvFactura.config.correo }}
+              </address>
+            </div>
+            <!-- /.col -->
+
+            <div class="col-sm-4 invoice-col">
+                Para
+                <address>
+                <strong><input type="text" value="{{cvFactura.cliente.Nombre}}"></input></strong>
+                <br>Direccion
+                <input type="text" value="{{cvFactura.cliente.Direccion}}"></input> <br>
+                Teléfono: <input type="text" value="{{cvFactura.cliente.Telefono}}"></input><br>
+                Email: <input type="text" value="{{cvFactura.cliente.Correo}}"></input>
+              </address>
+            </div>
+            <!-- /.col -->
+
+            <div class="col-sm-4 invoice-col">
+                <b>Factura ID: [ sin guardar ]</b><br>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+        <!-- Table row -->
+        <div class="row">
+            <div class="col-xs-12 table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Codigo</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Producto</th>
+                            <th>Subtotal</th>
+                            <th>Cancelar</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr ng-repeat="detalle in cvFactura.detalle">
+                            <td>{{ detalle.Id }}</td>
+                            <td><input type="number" ng-model="detalle.cantidad" ng-change="cvFactura.actualizar()"></td>
+                            <td>{{ detalle.valor | currency }}</td>
+                            <td>{{ detalle.Nombre }}</td>
+                            <td>{{ detalle.valor * detalle.cantidad | currency }}</td>
+                            <td><a class="btn btn-danger" ng-click="cvFactura.borrar_detalle( detalle )"><span class="glyphicon glyphicon-remove"></span></a></td>
+                        </tr>
+
+                        <tr>
+                            <td><input type="number" enter-key="cvFactura.buscarProducto( cvFactura.agregar )" ng-model="cvFactura.agregar.producto_id"></td>
+                            <td><input type="number" enter-key="cvFactura.buscarProducto( cvFactura.agregar )" ng-model="cvFactura.agregar.cantidad"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+        <div class="row">
+            <!-- accepted payments column -->
+            <div class="col-xs-6">
+
+                <textarea class="form-control" ng-model="factura.comentario" cols="30" rows="10"></textarea>
+
+            </div>
+            <!-- /.col -->
+
+            <div class="col-xs-6">
+
+                <p class="lead">Detalle del Pago</p>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th style="width:50%">Subtotal:</th>
+                                <td>{{ cvFactura.valores.monto | currency }}</td>
+                            </tr>
+                            <tr>
+                                <th>Impuesto (12%)</th>
+                                <td>{{ cvFactura.valores.impuesto | currency }}</td>
+                            </tr>
+                            <tr>
+                                <th>Total:</th>
+                                <td>{{ cvFactura.valores.monto_neto | currency }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+        <!-- this row will not appear when printing -->
+        <div class="row no-print">
+
+            <div class="col-xs-12">
+                <button ng-click="cancelar_orden()" class="btn btn-danger pull-left" style="margin-right: 5px;"><i class="fa fa-trash-o"></i> Cancelar pedido</button>
+                <button ng-click="guardar_factura()" class="btn btn-primary pull-right" style="margin-right: 5px;"><i class="fa fa-download"></i> Generar Factura</button>
+            </div>
+
+        </div>
+
+
+    </section>
+</div>

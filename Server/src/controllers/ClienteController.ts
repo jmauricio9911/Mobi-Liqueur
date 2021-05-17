@@ -12,11 +12,11 @@ class ClientController {
 
     public async getOne(req: Request, res: Response): Promise<any> {
         const { id } = req.params;
-        const data = await pool.query('SELECT * FROM cliente WHERE id = ?', [id]);
+        const data = await pool.query('SELECT * FROM cliente WHERE idCliente = ?', [id]);
         if (data.length > 0) {
             return res.json(data[0]);
         }
-        res.status(404).json({ text: "El cliente no existe" });
+        res.json({ text: "El cliente no existe", status: "E" });
     }
 
     public async create(req: Request, res: Response): Promise<void> {
@@ -27,13 +27,13 @@ class ClientController {
     public async update(req: Request, res: Response): Promise<void> {
         const { id } = req.params;
         const oldData = req.body;
-        await pool.query('UPDATE cliente set ? WHERE id = ?', [req.body, id]);
+        await pool.query('UPDATE cliente set ? WHERE idCliente = ?', [req.body, id]);
         res.json({ message: "El cliente ha sido actualizado exitosamente" });
     }
 
     public async delete(req: Request, res: Response): Promise<void> {
         const { id } = req.params;
-        await pool.query('DELETE FROM cliente WHERE id = ?', [id]);
+        await pool.query('DELETE FROM cliente WHERE idCliente = ?', [id]);
         res.json({ message: "El cliente ha sido eliminado exitosamente" });
     }
 }
