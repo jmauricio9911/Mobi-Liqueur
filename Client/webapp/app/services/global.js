@@ -14,6 +14,15 @@ angular.module('app.global', [])
 function global() {
     return {
         data: {},
-        user: {}
+        user: {},
+        car_cant: 0,
+        detalle: [],
+        config: {
+            aplicativo: "Mobi-Liqueur",
+            Iniiniciales: "M-L",
+            direccion: "CALLE 107 SUR #55-03",
+            telefono: 3125976400,
+            correo: "mobi-liqueur@gmail.com"
+        }
     };
 }
