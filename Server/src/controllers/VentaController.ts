@@ -6,15 +6,20 @@ import pool from '../database';
 class VentaController {
 
     public async list(req: Request, res: Response): Promise<void> {
-        const ventas = await pool.query('SELECT * FROM venta');
+        const ventas = await pool.query(`SELECT idFactura, Fecha, Total, Observacion, c.Nombre as cliente FROM venta v INNER JOIN cliente c 
+        ON v.Cliente_idCliente = c.idCliente`);
         res.json(ventas);
     }
 
     public async getOne(req: Request, res: Response): Promise<any> {
         const { id } = req.params;
-        const data = await pool.query('SELECT * FROM venta WHERE id = ?', [id]);
+        const data = await pool.query(`SELECT d.Factura_idFactura AS 'Factura', p.Nombre, d.Cantidad, d.valor, d.FormaPago, d.Estado
+                                        FROM detalleventa d
+                                        JOIN venta v ON d.Factura_idFactura=v.idFactura
+                                        JOIN producto p ON d.Producto_idProducto=p.id
+                                        WHERE d.Factura_idFactura = ?`, [id]);
         if (data.length > 0) {
-            return res.json(data[0]);
+            return res.json(data);
         }
         res.status(404).json({ text: "La venta no existe" });
     }
