@@ -39,6 +39,10 @@ function config($routeProvider) {
             controller: 'cvPromotion',
             controllerAs: 'cvPromotion'
         })
+        .when('/venta', {
+            templateUrl: 'app/views/sale.html',
+            controller: 'cvSale',
+            controllerAs: 'vmSale'
         .when('/factura', {
             templateUrl: 'app/views/factura.html',
             controller: 'cvFactura',
