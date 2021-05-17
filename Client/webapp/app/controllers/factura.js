@@ -11,11 +11,14 @@ function cvFactura(masterData, global, $scope) {
     cvFactura.detalle = [];
     cvFactura.detallefac = true;
     cvFactura.cliente = {};
+    cvFactura.comentario = "";
+    cvFactura.idFact = 0;
     /*Variables tipo funcion del controlador*/
     cvFactura.borrar_detalle = borrar_detalle;
     cvFactura.buscarProducto = buscarProducto;
     cvFactura.actualizar = actualizar;
     cvFactura.buscarCliente = buscarCliente;
+    cvFactura.guardar_factura = guardar_factura;
     /*Variables tipo obejto del controlador*/
     cvFactura.agregar = {
         producto_id: "",
@@ -126,7 +129,10 @@ function cvFactura(masterData, global, $scope) {
             });
 
     }
-
+    /**
+     * @Autor Mauricio Urriola
+     * @Fecha 16.05.2021
+     * @descripcion Funcion para validar si desea crear el cliente o no**/
     function optioncreate(text) {
         var mensaje = text + " " + "Desea crearlo?"
         swal({
@@ -144,10 +150,88 @@ function cvFactura(masterData, global, $scope) {
                 }
             });
     }
-
+    /**
+     * @Autor Mauricio Urriola
+     * @Fecha 16.05.2021
+     * @descripcion Funcion para actualizar la pagina en  caso de que no se cree el cliente**/
     function nocrear() {
         cvFactura.detallefac = false;
         $scope.$apply();
     }
+    /**
+     * @Autor Mauricio Urriola
+     * @Fecha 16.05.2021
+     * @descripcion Funcion para crear factura de pedido y su respéctivo detalle**/
+    function guardar_factura() {
+        //Guardamos cabecera de la factura
+        var fecha = new Date();
+        fecha = fecha.toLocaleDateString()
+        var cabecera = {
+            Fecha: fecha,
+            Total: cvFactura.valores.monto_neto,
+            Observacion: cvFactura.comentario,
+            Cliente_idCliente: cvFactura.cliente.idCliente,
+            FormaPago: ""
+        }
+        masterData.CreteCabeceraVenta(cabecera)
+            .then(function(data) {
+                var localdata = data.data;
+                createdetalle(localdata.id);
+            });
+    }
+    /**
+     * @Autor Mauricio Urriola
+     * @Fecha 16.05.2021
+     * @descripcion Funcion para crear el detalle de la factura**/
+    function createdetalle(id) {
+        cvFactura.idFact = id;
+        var flac = false;
+        //Recorremos el detalle de la factura para guardarlo 
+        for (let index = 0; index < cvFactura.detalle.length; index++) {
+
+            var item = {
+                    "Factura_idFactura": id,
+                    "Producto_idProducto": cvFactura.detalle[index].Id,
+                    "cantidad": cvFactura.detalle[index].cantidad,
+                    "valor": cvFactura.detalle[index].cantidad * cvFactura.detalle[index].valor
+                }
+                //Guardamos cada una de las posiciones
+            guardarposiciones(item);
+            flac = true;
+        }
+
+        //Mostramos mensaje success
+        if (flac) {
+            cvFactura.detallefac = true;
+            cvFactura.detallefac = [];
+            global.detalle = [];
+            cvFactura.cliente = {};
+            swal({
+                title: "Factura Creada!",
+                text: "ID: " + cvFactura.idFact,
+                icon: "success",
+            })
+            cvFactura.goToPage('products');
+        } else {
+            swal({
+                title: "Error!",
+                text: "No se logro generar la factura",
+                icon: "error",
+            })
+        }
+    }
+
+    /**
+     * @Autor Mauricio Urriola
+     * @Fecha 16.05.2021
+     * @descripcion Funcion para guardar posiciones del detalle**/
+    function guardarposiciones(item) {
+        masterData.CreteCabeceradetalle(item)
+            .then(function(data) {
+                var localdata = data.data;
+                console.log(localdata);
+            });
+    }
+
 
 }

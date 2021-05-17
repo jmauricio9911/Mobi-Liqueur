@@ -21,7 +21,12 @@ class VentaController {
 
     public async create(req: Request, res: Response): Promise<void> {
         const result = await pool.query('INSERT INTO venta set ?', [req.body]);
-        res.json({ message: 'La venta se ha guardado exitosamente' });
+        res.json({ message: 'La venta se ha guardado exitosamente', id: result.insertId });
+    }
+
+    public async createdetalleventa(req: Request, res: Response): Promise<void> {
+        const result = await pool.query('INSERT INTO detalleventa set ?', [req.body]);
+        res.json({ message: 'el detalle se ha guardado exitosamente', status: 'S'});
     }
 
     public async update(req: Request, res: Response): Promise<void> {

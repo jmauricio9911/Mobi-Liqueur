@@ -14,6 +14,7 @@ class ventaRoutes {
         this.router.get('/', ventaController.list);
         this.router.get('/:id', ventaController.getOne);
         this.router.post('/', ventaController.create);
+        this.router.post('/detalle',ventaController.createdetalleventa)
         this.router.put('/:id', ventaController.update);
         this.router.delete('/:id', ventaController.delete);
     }
