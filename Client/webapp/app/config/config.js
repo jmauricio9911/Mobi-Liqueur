@@ -43,6 +43,7 @@ function config($routeProvider) {
             templateUrl: 'app/views/sale.html',
             controller: 'cvSale',
             controllerAs: 'vmSale'
+        })
         .when('/factura', {
             templateUrl: 'app/views/factura.html',
             controller: 'cvFactura',
