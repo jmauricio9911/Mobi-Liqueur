@@ -28,6 +28,7 @@ function masterData($http) {
         getDataById: getDataById,
         send: send,
         UpdateData: UpdateData,
+        DeleteData: DeleteData,
         getPromotions: getPromotions,
         getPromotionsOne: getPromotionsOne,
         DeletePromotions: DeletePromotions,
@@ -153,6 +154,22 @@ function masterData($http) {
             url: URL + resource,
             method: "PUT",
             data: json
+        }).success(function(response, status, headers, config) {
+            return response;
+        }).error(function(response, status, headers, config) {
+            swal(
+                `ERROR ${status}`,
+                "Ocurrió un error con el servicio.",
+                "error"
+            );
+            return data;
+        });
+    }
+
+    function DeleteData(resource, json) {
+        return $http({
+            url: URL + resource,
+            method: "Delete"
         }).success(function(response, status, headers, config) {
             return response;
         }).error(function(response, status, headers, config) {

@@ -7,23 +7,29 @@ cvCombo.$inject = ['masterData', 'global'];
 function cvCombo(masterData, global) {
     /*Miembros del controlador*/
     var vmCombo = this;
-    vmCombo.goToPage = goToPage;
+    vmCombo.products = [];
     vmCombo.dataCombo = [];
     vmCombo.dataComboDetail = [];
+    vmCombo.dataComboProducto = [];
+    vmCombo.goToPage = goToPage;
     vmCombo.getComboOne = getComboOne;
     vmCombo.getComboDetail = getComboDetail;
+    vmCombo.getComboProduct = getComboProduct;
     vmCombo.saveData = saveData;
+    vmCombo.saveDataDetail = saveDataDetail; 
+    vmCombo.removeComboProduct = removeComboProduct; 
     vmCombo.clearForm = clearForm;
+    vmCombo.clearFormDetail = clearFormDetail;
     vmCombo.Formulario = false;
     vmCombo.btnAction = 'Guardar';
+    vmCombo.btnActionDetail = 'Guardar';
 
     
     vmCombo.init = function() {
         //Función inicial
         vmCombo.master = [];
         vmCombo.master.ListCombo = [];
-        vmCombo.master.ListRol = [];
-        getRol();
+        vmCombo.master.ListDetailCombo = [];
         getCombo();
         validateDataTable();
     };
@@ -42,16 +48,18 @@ function cvCombo(masterData, global) {
                 });
             });
     }
-    function getRol() {
-        masterData.getData('api/rol')
+    
+    function getProducts() {
+        vmCombo.products = []
+        masterData.getData('api/producto')
             .then(function(data) {
                 data.data.forEach(element => {
-                    vmCombo.master.ListRol.push(element);
+                    vmCombo.products.push(element)
                 });
             });
     }
 
-    //Función para obtener un usuarios
+    //Función para obtener un combo
     function getComboOne(id) {
         vmCombo.Formulario = true; //Manejo de formulario
         masterData.getDataById('api/combo/', id)
@@ -66,19 +74,23 @@ function cvCombo(masterData, global) {
             });
     }
 
-    //Función para obtener un usuarios
+    //Función para obtener un detalle de combo
     function getComboDetail(data) {
+        getProducts();
         vmCombo.dataComboDetail = data
-        masterData.getDataById('api/combo/', data.idCombo)
+        vmCombo.master.ListDetailCombo = []
+        masterData.getDataById('api/combo/detail/', data.idCombo)
             .then(function(data) {
-                vmCombo.dataComboDetail = data.data
-                if (vmCombo.dataComboDetail.Estado == 0) {
-                    vmCombo.dataComboDetail.Estado = false
-                } else {
-                    vmCombo.dataComboDetail.Estado = true
-                }
-                vmCombo.btnAction = 'Actualizar'
+                data.data.forEach(element => {
+                    vmCombo.master.ListDetailCombo.push(element);
+                });
             });
+    }
+
+    function getComboProduct(data) {
+        vmCombo.dataComboProducto = data
+        vmCombo.dataComboProducto.Producto_idProducto = data.idProducto
+        vmCombo.btnActionDetail = 'Actualizar'
     }
 
     //Función para guardar datos
@@ -107,6 +119,39 @@ function cvCombo(masterData, global) {
             swal("Error", 'Debe llenar el formulario', "error");
         }
     }
+
+    function saveDataDetail(dataComboProducto) {
+        if(Object.keys(dataComboProducto).length > 0) {
+            if(dataComboProducto.id) {
+                var object = {
+                    "id": dataComboProducto.id,
+                    "Combo_idCombo": vmCombo.dataComboDetail.idCombo,
+                    "Producto_idProducto": dataComboProducto.Producto_idProducto,
+                    "Cantidad": dataComboProducto.Cantidad
+                }
+                updateDataComboProduct(object)
+            } else {
+                var object = {
+                    "Combo_idCombo": vmCombo.dataComboDetail.idCombo,
+                    "Producto_idProducto": dataComboProducto.Producto_idProducto,
+                    "Cantidad": dataComboProducto.Cantidad
+                }
+                masterData.send('api/combo/detail', object)
+                .then(function(data) {
+                    if (data.data.message) {
+                        swal("Exito", data.data.message, "success");
+                        getComboDetail(vmCombo.dataComboDetail);
+                        clearFormDetail()
+                    } else {
+                        swal('Error');
+                    }
+                });
+            }
+        } else {
+            //  validation
+            swal("Error", 'Debe llenar el formulario', "error");
+        }
+    }
     
     //Función para actualizar datos
     function updateData(data) {
@@ -115,6 +160,19 @@ function cvCombo(masterData, global) {
                 if (data.data.message) {
                     swal("Exito", data.data.message, "success");
                     getCombo();
+                } else {
+                    swal('Error');
+                }
+            });
+    }
+
+    function updateDataComboProduct(data) {
+        masterData.UpdateData('api/combo/detail/' + data.id, data)
+        .then(function(data) {
+                if (data.data.message) {
+                    swal("Exito", data.data.message, "success");
+                    getComboDetail(vmCombo.dataComboDetail);
+                    clearFormDetail()
                 } else {
                     swal('Error');
                 }
@@ -127,7 +185,26 @@ function cvCombo(masterData, global) {
         vmCombo.dataCombo = []
         vmCombo.btnAction = 'Guardar'
     }
+
+    function clearFormDetail() {
+        vmCombo.dataComboProducto = []
+        vmCombo.btnActionDetail = 'Guardar'
+    }
     
+    function removeComboProduct(id) {
+        masterData.DeleteData('api/combo/detail/' + id)
+        .then(function(data) {
+                if (data.data.message) {
+                    swal("Exito", data.data.message, "success");
+                    getComboDetail(vmCombo.dataComboDetail);
+                    clearFormDetail();
+                } else {
+                    swal('Error');
+                }
+            });
+    }
+
+
     /**
      * @Funcion : configDatatable
      * @Descripcion : Configuracion basica para dataTable en español ect.
