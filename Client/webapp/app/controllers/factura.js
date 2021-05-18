@@ -13,6 +13,7 @@ function cvFactura(masterData, global, $scope) {
     cvFactura.cliente = {};
     cvFactura.comentario = "";
     cvFactura.idFact = 0;
+    cvFactura.cuerpo = "";
     /*Variables tipo funcion del controlador*/
     cvFactura.borrar_detalle = borrar_detalle;
     cvFactura.buscarProducto = buscarProducto;
@@ -77,15 +78,36 @@ function cvFactura(masterData, global, $scope) {
                 var producto = {
                     Id: item.idProducto,
                     Nombre: item.Nombre,
-                    cantidad: 1,
+                    cantidad: 0,
                     valor: item.ValorUnitario,
                     cantidadPr: item.Cantidad
                 };
-                cvFactura.detalle.push(producto);
-                recalcular();
+                if (cvFactura.detalle.length !== 0) {
+                    validaritem(producto);
+                } else {
+                    cvFactura.detalle.push(producto);
+                }
+
             });
 
 
+    }
+    /**
+     * @Autor Mauricio Urriola
+     * @Fecha 16.05.2021
+     * @descripcion Funcion para validar si un item ya exiuste sobre el detaller**/
+    function validaritem(item) {
+        var flag = true;
+        for (let index = 0; index < cvFactura.detalle.length; index++) {
+            if (cvFactura.detalle[index].Id === item.Id) {
+                cvFactura.detalle[index].cantidad = cvFactura.detalle[index].cantidad + 1;
+                flag = false;
+            }
+        }
+        if (flag) {
+            cvFactura.detalle.push(item);
+        }
+        recalcular();
     }
     /**
      * @Autor Mauricio Urriola
@@ -195,13 +217,21 @@ function cvFactura(masterData, global, $scope) {
                     "cantidad": cvFactura.detalle[index].cantidad,
                     "valor": cvFactura.detalle[index].cantidad * cvFactura.detalle[index].valor
                 }
-                //Guardamos cada una de las posiciones
+                //Actualizamos la cantidad de los productos
+            debugger;
+            cantidadreal = cvFactura.detalle[index].cantidadPr - cvFactura.detalle[index].cantidad;
+            idPr = cvFactura.detalle[index].Id;
+            updateCantidad(cantidadreal, idPr);
+            //Guardamos cada una de las posiciones
             guardarposiciones(item);
             flac = true;
         }
 
         //Mostramos mensaje success
         if (flac) {
+            if (cvFactura.cliente.Correo !== "") {
+                enviarcorreo();
+            }
             cvFactura.detallefac = true;
             cvFactura.detallefac = [];
             global.detalle = [];
@@ -232,6 +262,81 @@ function cvFactura(masterData, global, $scope) {
                 console.log(localdata);
             });
     }
+    /**
+     * @Autor Mauricio Urriola
+     * @Fecha 16.05.2021
+     * @descripcion Funcion para  actulizar la cantidad del producto**/
+    function updateCantidad(real, id) {
+        var cant = {
+            Cantidad: real
+        }
+        masterData.UpdateData('api/producto/' + id, cant)
+            .then(function(data) {
+                if (data.data.message) {
+                    console.log('Cantidad Actualizada')
+                } else {
+                    console.error('Error al actualizar cantidad de producto');
+                }
 
+            });
+    }
+    /**
+     * @Autor Mauricio Urriola
+     * @Fecha 16.05.2021
+     * @descripcion Funcion para armar el cuerpo del correo*/
+    function cuerpocorreo() {
+        var data = cvFactura.detalle;
+        let myhtml = "<div class='row'><h2>Id Factura: " + cvFactura.idFact + "";
+        myhtml += "<div class='col-xs-12'><table><tr><td style='width: 100px; color: blue;'>Codigo</td>";
+        myhtml += "<td style='width: 100px; color: blue; text-align: left;'>Producto</td>";
+        myhtml += "<td style='width: 100px; color: blue; text-align: left;'>Cantidad</td>";
+        myhtml += "<td style='width: 100px; color: blue; text-align: left;'>SubTotal</td></tr>";
+        for (let i = 0; i < data.length; i++) {
+            myhtml += "<tr><td style='width: 100px;text-align: left;'>" + data[i].Id + "</td>";
+            myhtml += "<td style='width: 100px;text-align: left;'>" + data[i].Nombre + "</td>";
+            myhtml += "<td style='width: 100px;text-align: left;'>" + data[i].cantidad + "</td>";
+            var subtotal = data[i].cantidad * data[i].valor
+            myhtml += "<td style='width: 100px;text-align: left;'>" + subtotal + "</td>";
+            myhtml += "</tr>";
+        }
+        myhtml += "</table></div>"
+        myhtml += `<div class="row">
+        <h3>Detalle del Pago</h3>
+        <div class=" class="col-xs-6"">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th style="width:50%">Subtotal:</th>
+                        <td>${cvFactura.valores.monto}</td>
+                    </tr>
+                    <tr>
+                        <th>Impuesto (12%)</th>
+                        <td>${ cvFactura.valores.impuesto}</td>
+                    </tr>
+                    <tr>
+                        <th>Total:</th>
+                        <td>${ cvFactura.valores.monto_neto}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        </div>
+    </div>`
+        return myhtml;
+    }
+
+    function enviarcorreo() {
+        asunto = cuerpocorreo();
+        var mail = {
+            "correo": cvFactura.cliente.Correo,
+            "asunto": asunto
+        };
+        masterData.sentmail(mail)
+            .then(function(data) {
+                var localdata = data.data;
+                console.log(localdata);
+            });
+
+    }
 
 }
