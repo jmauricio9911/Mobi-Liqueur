@@ -13,10 +13,10 @@ class VentaController {
 
     public async getOne(req: Request, res: Response): Promise<any> {
         const { id } = req.params;
-        const data = await pool.query(`SELECT d.Factura_idFactura AS 'Factura', p.Nombre, d.Cantidad, d.valor, d.FormaPago, d.Estado
+        const data = await pool.query(`SELECT d.Factura_idFactura AS 'Factura', p.Nombre, d.Cantidad, d.valor, d.Estado
                                         FROM detalleventa d
                                         JOIN venta v ON d.Factura_idFactura=v.idFactura
-                                        JOIN producto p ON d.Producto_idProducto=p.id
+                                        JOIN producto p ON d.Producto_idProducto=p.idProducto
                                         WHERE d.Factura_idFactura = ?`, [id]);
         if (data.length > 0) {
             return res.json(data);

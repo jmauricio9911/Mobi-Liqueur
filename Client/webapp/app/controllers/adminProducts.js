@@ -12,10 +12,11 @@ function cvAdminProducts(masterData, global) {
     vmAdminProducts.getAdminProductOne = getAdminProductOne;
     vmAdminProducts.saveData = saveData;
     vmAdminProducts.clearForm = clearForm;
+    vmAdminProducts.updateData = updateData;
     vmAdminProducts.Formulario = false;
     vmAdminProducts.btnAction = 'Guardar';
 
-    
+
     vmAdminProducts.init = function() {
         //Función inicial
         vmAdminProducts.master = [];
@@ -55,38 +56,38 @@ function cvAdminProducts(masterData, global) {
 
     //Función para guardar datos
     function saveData(dataProduct) {
-        if(Object.keys(dataProduct).length > 0) {
-            if(dataProduct.id) {
+        if (Object.keys(dataProduct).length > 0) {
+            if (dataProduct.id) {
                 updateData(dataProduct)
             } else {
                 var object = {
-                "Nombre": dataProduct.Nombre,
-                "Cantidad": dataProduct.Cantidad,
-                "ValorUnitario": dataProduct.ValorUnitario,
-                "FechaVencimiento": dataProduct.FechaVencimiento,
-                "Estado": dataProduct.Estado,
-                // "NombreImagen": dataProduct.NombreImagen
+                    "Nombre": dataProduct.Nombre,
+                    "Cantidad": dataProduct.Cantidad,
+                    "ValorUnitario": dataProduct.ValorUnitario,
+                    "FechaVencimiento": dataProduct.FechaVencimiento,
+                    "Estado": dataProduct.Estado,
+                    // "NombreImagen": dataProduct.NombreImagen
                 }
                 masterData.send('api/producto', object)
-                .then(function(data) {
-                    if (data.data.message) {
-                        swal("Exito", data.data.message, "success");
-                        getAdminProducts();
-                    } else {
-                        swal('Error');
-                    }
-                });
+                    .then(function(data) {
+                        if (data.data.message) {
+                            swal("Exito", data.data.message, "success");
+                            getAdminProducts();
+                        } else {
+                            swal('Error');
+                        }
+                    });
             }
         } else {
             //  validation
             swal("Error", 'Debe llenar el formulario', "error");
         }
     }
-    
+
     //Función para actualizar datos
     function updateData(data) {
         masterData.UpdateData('api/producto/' + data.id, data)
-        .then(function(data) {
+            .then(function(data) {
                 if (data.data.message) {
                     swal("Exito", data.data.message, "success");
                     getAdminProducts();
@@ -102,7 +103,7 @@ function cvAdminProducts(masterData, global) {
         vmAdminProducts.dataProducts = []
         vmAdminProducts.btnAction = 'Guardar'
     }
-    
+
     /**
      * @Funcion : configDatatable
      * @Descripcion : Configuracion basica para dataTable en español ect.

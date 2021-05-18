@@ -34,7 +34,8 @@ function masterData($http) {
         UpdatePromotions: UpdatePromotions,
         CreatePromotions: CreatePromotions,
         CreteCabeceraVenta: CreteCabeceraVenta,
-        CreteCabeceradetalle: CreteCabeceradetalle
+        CreteCabeceradetalle: CreteCabeceradetalle,
+        sentmail: sentmail
     };
     return service;
 
@@ -81,6 +82,10 @@ function masterData($http) {
 
     function CreteCabeceradetalle(json) {
         return send(`api/venta/detalle`, json);
+    }
+
+    function sentmail(json) {
+        return send('api/mails', json)
     }
 
     /**

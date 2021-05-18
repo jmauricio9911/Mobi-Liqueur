@@ -10,6 +10,7 @@ import clienteRoutes from './routes/clienteRoutes';
 import comboRoutes from './routes/comboRoutes';
 import PromotionsRouter from './routes/PromotionsRouter';
 import ventaRoutes from './routes/ventaRoutes';
+import mailsRoutes from './routes/mailsRoutes';
 
 class Server {
 
@@ -39,6 +40,7 @@ class Server {
         this.app.use('/api/venta', ventaRoutes);
         this.app.use('/api/promotions', PromotionsRouter);
         this.app.use('/api/combo', comboRoutes);
+        this.app.use('/api/mails',mailsRoutes);
     }
 
     start() {
