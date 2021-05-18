@@ -10,8 +10,8 @@ class EmialController {
             var transporter = nodemailer.createTransport({
                 service: 'Gmail',
                 auth: {
-                    user: 'mauriciozabaleta123@gmail.com',
-                    pass: '26147103'
+                    user: 'tumail@gmail.com',
+                    pass: '*********'
                 }
             });
             // Definimos el email
