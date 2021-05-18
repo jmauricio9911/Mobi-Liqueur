@@ -24,10 +24,20 @@ function config($routeProvider) {
             controller: 'cvSubMenu',
             controllerAs: 'vmSubMenu'
         })
+        .when('/user', {
+            templateUrl: 'app/views/user.html',
+            controller: 'cvUser',
+            controllerAs: 'vmUser'
+        })
         .when('/products', {
             templateUrl: 'app/views/products.html',
             controller: 'cvProducts',
             controllerAs: 'vmProducts'
+        })
+        .when('/combo', {
+            templateUrl: 'app/views/combo.html',
+            controller: 'cvCombo',
+            controllerAs: 'vmCombo'
         })
         .when('/adminProducts', {
             templateUrl: 'app/views/adminProducts.html',

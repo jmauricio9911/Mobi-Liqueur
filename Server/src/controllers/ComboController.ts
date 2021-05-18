@@ -12,7 +12,7 @@ class ComboController {
 
     public async getOne(req: Request, res: Response): Promise<any> {
         const { id } = req.params;
-        const data = await pool.query('SELECT * FROM combo WHERE id = ?', [id]);
+        const data = await pool.query('SELECT * FROM combo WHERE idCombo = ?', [id]);
         if (data.length > 0) {
             return res.json(data[0]);
         }
@@ -27,13 +27,13 @@ class ComboController {
     public async update(req: Request, res: Response): Promise<void> {
         const { id } = req.params;
         const oldData = req.body;
-        await pool.query('UPDATE combo set ? WHERE id = ?', [req.body, id]);
+        await pool.query('UPDATE combo set ? WHERE idCombo = ?', [req.body, id]);
         res.json({ message: "El combo ha sido actualizado exitosamente" });
     }
 
     public async delete(req: Request, res: Response): Promise<void> {
         const { id } = req.params;
-        await pool.query('DELETE FROM combo WHERE id = ?', [id]);
+        await pool.query('DELETE FROM combo WHERE idCombo = ?', [id]);
         res.json({ message: "El combo ha sido eliminado exitosamente" });
     }
 }
