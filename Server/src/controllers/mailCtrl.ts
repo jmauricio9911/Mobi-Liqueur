@@ -1,6 +1,8 @@
 var nodemailer = require('nodemailer');
 import { Request, Response } from 'express';
 import pool from '../database';
+const pdf = require('html-pdf');
+const path = require('path');
 
 class EmialController {
     public async enviarFactura(req: Request, res: Response): Promise<any> {
@@ -10,16 +12,27 @@ class EmialController {
             var transporter = nodemailer.createTransport({
                 service: 'Gmail',
                 auth: {
-                    user: 'tumail@gmail.com',
-                    pass: '*********'
+                    user: 'tuemail@gmail.com',
+                    pass: '******'
                 }
             });
+            //Cabecera del correo
+            const cabecera = `<h4>Apreciado Cliente<h4>
+            <p>¡Gracias por visitarnos y hacer su primera compra! Estamos contentos de que haya encontrado lo que estaba buscando. Nuestro objetivo es que siempre esté satisfecho, así que avísenos si su nivel de satisfacción. Esperamos volver a verle de nuevo. ¡Que tengas un gran día!</p>`
             // Definimos el email
             var mailOptions = {
                 from: 'Mobi-Liqueur',
                 to: emails,
                 subject: 'Mobi-Liqueur[Factura]',
-                html: asunto
+                html: cabecera,
+                attachments: [
+                    {
+                        filename: 'file-name.pdf', // <= Here: made sure file name match
+                        path: path.join('./html-pdf.pdf'), // <= Here
+                        contentType: 'application/pdf'
+                    }
+                ]
+
             };
             //Recorremos el array(emails) para tomar los correos y proceder a enviar.
                 transporter.sendMail(mailOptions, function (error: any, info: any) {
@@ -32,6 +45,13 @@ class EmialController {
                     }
                 });
         };
+        pdf.create(req.body.asunto).toFile('./html-pdf.pdf', function(err:any, res:any) {
+            if (err){
+                console.log(err);
+            } else {
+                console.log(res);
+            }
+        });
         sendEmail(req, res, req.body.correo, req.body.asunto);
         }
     }

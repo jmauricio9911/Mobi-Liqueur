@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 
-import promotionController from '../controllers/PromocionController';
+import promotionController from '../controllers/promotionControllers';
 
 class promotionRoutes {
 

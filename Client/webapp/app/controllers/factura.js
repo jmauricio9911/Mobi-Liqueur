@@ -23,7 +23,7 @@ function cvFactura(masterData, global, $scope) {
     /*Variables tipo obejto del controlador*/
     cvFactura.agregar = {
         producto_id: "",
-        cantidad: 1
+        cantidad: 0
     };
     cvFactura.valores = {
         monto: 0,
@@ -286,21 +286,76 @@ function cvFactura(masterData, global, $scope) {
      * @descripcion Funcion para armar el cuerpo del correo*/
     function cuerpocorreo() {
         var data = cvFactura.detalle;
-        let myhtml = "<div class='row'><h2>Id Factura: " + cvFactura.idFact + "";
-        myhtml += "<div class='col-xs-12'><table><tr><td style='width: 100px; color: blue;'>Codigo</td>";
-        myhtml += "<td style='width: 100px; color: blue; text-align: left;'>Producto</td>";
-        myhtml += "<td style='width: 100px; color: blue; text-align: left;'>Cantidad</td>";
-        myhtml += "<td style='width: 100px; color: blue; text-align: left;'>SubTotal</td></tr>";
+        var fecha = new Date();
+        fecha = fecha.toLocaleDateString()
+        let myhtml = `<!doctype html>
+        <html>
+           <head>
+                <meta charset="utf-8">
+                <title>PDF Result Template</title>
+                <style>
+                table {
+                    border-collapse: collapse;
+                    width: 100%;
+                  }
+                  
+                  th, td {
+                    padding: 5px;
+                    text-align: left;
+                  }
+                  </style>
+            </head>
+            <body>
+            <div class="row">
+            <div class="col-sm-4">
+            <h4 class="page-header">
+                Numero de Factura: ${cvFactura.idFact}
+                
+                Fecha: ${fecha}
+            <h4>
+            </div>
+            <hr>
+            <div class="col-sm-4">
+                Datos Empresa:
+                <address>
+                <strong>${cvFactura.config.aplicativo } - ${cvFactura.config.Iniiniciales}</strong><br>
+                ${ cvFactura.config.direccion }
+                Teléfono: ${ cvFactura.config.telefono }<br>
+                Email: ${ cvFactura.config.correo }
+              </address>
+            </div>
+            <!-- /.col -->
+            <hr>
+            <div class="col-sm-4">
+                Datos Cliente:
+                <address>
+                <strong>Nombre: ${cvFactura.cliente.Nombre}</strong><br>
+                Direccion:${cvFactura.cliente.Direccion}<br>
+                Teléfono: ${cvFactura.cliente.Telefono}<br>
+                Email: ${cvFactura.cliente.Correo}
+              </address>
+            </div>
+            <hr>
+        <div class="col-xs-12">
+        <h4>Detalle de productos</h4>
+            <table>
+            <tr>
+              <td>Codigo</td>
+              <td>Producto</td>
+              <td>Cantidad</td>
+              <td>SubTotal</td></tr>`
         for (let i = 0; i < data.length; i++) {
-            myhtml += "<tr><td style='width: 100px;text-align: left;'>" + data[i].Id + "</td>";
-            myhtml += "<td style='width: 100px;text-align: left;'>" + data[i].Nombre + "</td>";
-            myhtml += "<td style='width: 100px;text-align: left;'>" + data[i].cantidad + "</td>";
+            myhtml += "<tr><td>" + data[i].Id + "</td>";
+            myhtml += "<td>" + data[i].Nombre + "</td>";
+            myhtml += "<td>" + data[i].cantidad + "</td>";
             var subtotal = data[i].cantidad * data[i].valor
-            myhtml += "<td style='width: 100px;text-align: left;'>" + subtotal + "</td>";
+            myhtml += "<td>" + subtotal + "</td>";
             myhtml += "</tr>";
         }
-        myhtml += "</table></div>"
-        myhtml += `<div class="row">
+        myhtml += `</table>
+        </div>
+        <hr>
+        <div class="row">
         <h3>Detalle del Pago</h3>
         <div class=" class="col-xs-6"">
             <table class="table">
@@ -321,7 +376,10 @@ function cvFactura(masterData, global, $scope) {
             </table>
         </div>
         </div>
-    </div>`
+    </div>
+    </body>
+    </html>
+    `
         return myhtml;
     }
 

@@ -2,3 +2,5 @@
 node_modules
 jspm_packages
 build
+factura.pdf
+html-pdf.pdf
