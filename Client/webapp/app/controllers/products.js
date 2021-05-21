@@ -2,9 +2,9 @@ angular.module('app.cvProducts', [])
     .controller('cvProducts', cvProducts);
 
 /*Inyección de dependencia*/
-cvProducts.$inject = ['masterData', 'global'];
+cvProducts.$inject = ['masterData', '$rootScope', 'global'];
 
-function cvProducts(masterData, global) {
+function cvProducts(masterData, $rootScope, global) {
     /*Miembros del controlador*/
     var vmProducts = this;
     vmProducts.goToPage = goToPage;
@@ -16,7 +16,8 @@ function cvProducts(masterData, global) {
     vmProducts.items = items;
 
     vmProducts.init = function() {
-        //Función inicial
+        //Funcion inicial
+        $rootScope.product = true;
         getProducts();
     };
 

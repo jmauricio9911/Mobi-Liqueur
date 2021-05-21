@@ -15,10 +15,11 @@ function cvAdminProducts(masterData, global) {
     vmAdminProducts.updateData = updateData;
     vmAdminProducts.Formulario = false;
     vmAdminProducts.btnAction = 'Guardar';
+    masterData.ValidateSession()
 
 
     vmAdminProducts.init = function() {
-        //Función inicial
+        //Funcion inicial 
         vmAdminProducts.master = [];
         vmAdminProducts.master.ListProducts = [];
         getAdminProducts();

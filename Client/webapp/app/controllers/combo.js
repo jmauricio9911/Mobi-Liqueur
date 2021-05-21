@@ -23,10 +23,11 @@ function cvCombo(masterData, global) {
     vmCombo.Formulario = false;
     vmCombo.btnAction = 'Guardar';
     vmCombo.btnActionDetail = 'Guardar';
+    masterData.ValidateSession()
 
     
     vmCombo.init = function() {
-        //Función inicial
+        //Funcion inicial 
         vmCombo.master = [];
         vmCombo.master.ListCombo = [];
         vmCombo.master.ListDetailCombo = [];
