@@ -14,10 +14,11 @@ function cvUser(masterData, global) {
     vmUser.clearForm = clearForm;
     vmUser.Formulario = false;
     vmUser.btnAction = 'Guardar';
+    masterData.ValidateSession()
 
     
     vmUser.init = function() {
-        //Función inicial
+        //Funcion inicial 
         vmUser.master = [];
         vmUser.master.ListUser = [];
         vmUser.master.ListRol = [];
@@ -68,9 +69,12 @@ function cvUser(masterData, global) {
     function saveData(dataUser) {
         if(Object.keys(dataUser).length > 0) {
             if(dataUser.idUsuario) {
+                delete dataUser['password']
                 updateData(dataUser)
             } else {
                 var object = {
+                    "Cedula": dataUser.Cedula,
+                    "password": CryptoJS.AES.encrypt(dataUser.password, '123').toString(),
                     "Nombre": dataUser.Nombre,
                     "Edad": dataUser.Edad,
                     "Correo": dataUser.Correo,
@@ -83,6 +87,7 @@ function cvUser(masterData, global) {
                     if (data.data.message) {
                         swal("Exito", data.data.message, "success");
                         getUser();
+                        clearForm();
                     } else {
                         swal('Error');
                     }
@@ -101,6 +106,7 @@ function cvUser(masterData, global) {
                 if (data.data.message) {
                     swal("Exito", data.data.message, "success");
                     getUser();
+                    clearForm();
                 } else {
                     swal('Error');
                 }
@@ -110,6 +116,7 @@ function cvUser(masterData, global) {
     }
 
     function clearForm() {
+        vmUser.Formulario = false;
         vmUser.dataUser = []
         vmUser.btnAction = 'Guardar'
     }

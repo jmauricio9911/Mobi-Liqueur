@@ -1,0 +1,24 @@
+<div class="wrapper fadeInDown" ng-init="vmLogin.init()">
+    <div id="content" class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <form class="form-group center-block" ng-submit="vmLogin.login(vmLogin.data)" novalidate="novalidate">
+            <div class="center-block fadeIn second">
+                <div class="form-group">
+                    <label>Ingrese Usuario</label><br>
+                    <input type="text" name="" id="" ng-model="vmLogin.data.usuario">
+                    <label for=""></label>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label><br>
+                    <input type="password" ng-model="vmLogin.data.password">
+                    <label for=""></label>
+                </div>
+                <br>
+            </div>
+            <div class="fadeIn fourth">
+                <input type="submit" class="fadeIn fourth" value="Iniciar sesión">
+            </div>
+            <label class="error" style="color: red">{{vmLogin.data.error}}</label>
+        </form>
+    </div>
+
+</div>

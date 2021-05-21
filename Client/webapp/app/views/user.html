@@ -9,6 +9,7 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Edad</th>
+                        <th>Cedula</th>
                         <th>Correo</th>
                         <th>Celular</th>
                         <th>Rol</th>
@@ -21,6 +22,7 @@
                     <tr ng-repeat="item in vmUser.master.ListUser | filter:busqueda | orderBy:columna: reverse">
                         <td>{{item.Nombre}}</td>
                         <td>{{item.Edad}}</td>
+                        <td>{{item.Cedula}}</td>
                         <td>{{item.Correo}}</td>
                         <td>{{item.Celular}}</td>
                         <td>{{item.TipoRol}}</td>
@@ -41,7 +43,16 @@
                     <input type="text" id="id" class="form-control" name="id"
                         ng-model="vmUser.dataUser.idUsuario" disabled>
                 </div>
-
+                <div class="form-group">
+                    <label for="Cedula" class="control-label">Cedula</label>
+                    <input type="text" id="Cedula" class="form-control" name="Cedula"
+                        ng-model="vmUser.dataUser.Cedula" required>
+                </div>
+                <div class="form-group" ng-show="!vmUser.Formulario">
+                    <label for="Contraseña" class="control-label">Contraseña</label>
+                    <input type="password" id="Contraseña" class="form-control" name="Contraseña"
+                        ng-model="vmUser.dataUser.password" required>
+                </div>
                 <div class="form-group">
                     <label for="nombre" class="control-label">Nombre</label>
                     <input type="text" id="nombre" class="form-control" name="nombre"

@@ -23,6 +23,6 @@ function global() {
             direccion: "CALLE 107 SUR #55-03",
             telefono: 3125976400,
             correo: "mobi-liqueur@gmail.com"
-        }
+        },
     };
 }

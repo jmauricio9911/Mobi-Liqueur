@@ -17,6 +17,7 @@ class UserController {
             return res.json(data[0]);
         }
         res.status(404).json({ text: "El usuario no existe" });
+    
     }
 
     public async create(req: Request, res: Response): Promise<void> {

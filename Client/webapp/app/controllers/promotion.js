@@ -9,9 +9,10 @@ function cvPromotion(masterData, global) {
     var cvPromotion = this;
 
     cvPromotion.goToPage = goToPage;
+    masterData.ValidateSession()
 
     cvPromotion.init = function() {
-        //Funcion inicial
+        //Funcion inicial 
         cvPromotion.master = [];
         cvPromotion.master.ListPromotions = []; //Promosiones
         cvPromotion.Promotions = []; //Promosiones

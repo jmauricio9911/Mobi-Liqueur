@@ -10,8 +10,10 @@ function cvSale(masterData, global) {
     vmSale.goToPage = goToPage;
     vmSale.getSaleOne = getSaleOne;
     vmSale.dataSale = [];
+    masterData.ValidateSession()
     
     vmSale.init = function () {
+        //Funcion inicial 
         vmSale.master = [];
         vmSale.master.ListSale = [];
         vmSale.master.ListDetailSale = [];
