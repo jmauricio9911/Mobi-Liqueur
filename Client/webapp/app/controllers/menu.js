@@ -9,7 +9,7 @@ function cvMenu(global) {
     var vmMenu = this;
 
     vmMenu.goToPage = goToPage;
-
+    vmMenu.fachoy = 0;
     vmMenu.init = function() {
         //Funcion inicial
     };

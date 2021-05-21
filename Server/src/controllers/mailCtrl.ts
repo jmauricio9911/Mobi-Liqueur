@@ -13,7 +13,7 @@ class EmialController {
                 service: 'Gmail',
                 auth: {
                     user: 'tuemail@gmail.com',
-                    pass: '******'
+                    pass: '********'
                 }
             });
             //Cabecera del correo

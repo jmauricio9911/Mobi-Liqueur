@@ -9,8 +9,8 @@
                 <div class="col-sm-4">
                     <div class="thumbnail">
                         <div class="caption text-center">
-                            <p><span class="glyphicon glyphicon-envelope"></span>&nbsp;Reportes</p>
-                            <div class="thumbnail-description smaller">Descripción de sub menú.</div>
+                            <p><span class="glyphicon glyphicon-envelope"></span>&nbsp;Reportes Ventas</p>
+                            <div class="thumbnail-description smaller">Listar Ventas del realizadas con su respectivo detalle</div>
                         </div>
                         <div class="caption card-footer text-center">
                             <input type="button" value="IR" ng-click="vmMenu.goToPage('subMenu')">
@@ -21,8 +21,8 @@
                 <div class="col-sm-4">
                     <div class="thumbnail">
                         <div class="caption text-center">
-                            <p><span class="glyphicon glyphicon-glass"></span>&nbsp;Pedidos</p>
-                            <div class="thumbnail-description smaller">Descripción de sub menú.</div>
+                            <p><span class="glyphicon glyphicon-glass"></span>&nbsp;Administración de productos</p>
+                            <div class="thumbnail-description smaller">Administrar los productos del sistema</div>
                         </div>
                         <div class="caption card-footer text-center">
                             <input type="button" value="IR" ng-click="vmMenu.goToPage('subMenu')">
@@ -55,8 +55,11 @@
                 <div class="col-sm-4">
                     <div class="thumbnail">
                         <div class="caption text-center">
-                            <p><span class="glyphicon glyphicon-folder-open"></span>&nbsp;Factura</p>
-                            <div class="thumbnail-description smaller">Crear Factura</div>
+                            <p><span class="glyphicon glyphicon-folder-open"></span>&nbsp;Facturacion - pedidos</p>
+                            <!-- <div class="inner"> -->
+                            <p>Facturas generadas hoy</p>
+                            <h3>{{vmMenu.fachoy}}</h3>
+                            <!-- </div> -->
                         </div>
                         <div class="caption card-footer text-center">
                             <input type="button" value="IR" ng-click="vmMenu.goToPage('factura')">

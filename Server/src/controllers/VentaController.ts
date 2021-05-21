@@ -24,6 +24,19 @@ class VentaController {
         res.status(404).json({ text: "La venta no existe" });
     }
 
+    public async getday(req: Request, res: Response): Promise<any> {
+        let fecha = new Date();
+        let fe = fecha.toLocaleDateString()
+        let fn  = fe.split("/");
+        let hoy = fn[2] + "/" + fn[1] + "/" + fn[0];
+        
+        const data = await pool.query(`SELECT COUNT(idFactura) FROM venta WHERE Fecha = ${hoy}}`);
+        if (data.length > 0) {
+            return res.json(data);
+        }
+        res.status(404).json({ text: "0" });
+    }
+
     public async create(req: Request, res: Response): Promise<void> {
         const result = await pool.query('INSERT INTO venta set ?', [req.body]);
         res.json({ message: 'La venta se ha guardado exitosamente', id: result.insertId });

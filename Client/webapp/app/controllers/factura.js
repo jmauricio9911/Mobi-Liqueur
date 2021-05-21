@@ -188,8 +188,11 @@ function cvFactura(masterData, global, $scope) {
         //Guardamos cabecera de la factura
         var fecha = new Date();
         fecha = fecha.toLocaleDateString()
+        fecha = fecha.split("/");
+        var fn = fecha[2] + "/" + fecha[1] + "/" + fecha[0];
+        console.log(fn);
         var cabecera = {
-            Fecha: fecha,
+            Fecha: fn,
             Total: cvFactura.valores.monto_neto,
             Observacion: cvFactura.comentario,
             Cliente_idCliente: cvFactura.cliente.idCliente,
