@@ -11,6 +11,7 @@ import comboRoutes from './routes/comboRoutes';
 import PromotionsRouter from './routes/PromotionsRouter';
 import ventaRoutes from './routes/ventaRoutes';
 import mailsRoutes from './routes/mailsRoutes';
+import loginRoutes from './routes/loginRoutes';
 
 class Server {
 
@@ -33,6 +34,7 @@ class Server {
     //Configuracion de rutas del servidor Microservicios.
     routes(): void {
         this.app.use('/', indexRoutes);
+        this.app.use('/api/login',loginRoutes);
         this.app.use('/api/producto', productosRoutes);
         this.app.use('/api/user', userRoutes);
         this.app.use('/api/cliente', clienteRoutes);

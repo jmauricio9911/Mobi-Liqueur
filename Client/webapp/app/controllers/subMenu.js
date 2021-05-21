@@ -10,9 +10,10 @@ function cvSubMenu(global) {
 
     vmSubMenu.exit = exit;
     vmSubMenu.alert = alert;
+    masterData.ValidateSession()
 
     vmSubMenu.init = function() {
-        //Funcion inicial
+        //Funcion inicial 
     };
 
     function exit() {

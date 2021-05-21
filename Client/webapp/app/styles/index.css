@@ -153,7 +153,7 @@ input[type=password]:focus {
     border-style: groove;
 }
 
-.headquartersData {
+.loginData {
     position: absolute;
 }
 

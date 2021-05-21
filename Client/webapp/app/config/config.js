@@ -9,10 +9,10 @@ function config($routeProvider) {
 
 
     $routeProvider
-        .when('/headquarters', {
-            templateUrl: 'app/views/headquarters.html',
-            controller: 'cvHeadquarters',
-            controllerAs: 'vmHeadquarters'
+        .when('/login', {
+            templateUrl: 'app/views/login.html',
+            controller: 'cvLogin',
+            controllerAs: 'vmLogin'
         })
         .when('/menu', {
             templateUrl: 'app/views/menu.html',
@@ -60,7 +60,9 @@ function config($routeProvider) {
             controllerAs: 'cvFactura'
         })
         .otherwise({
-            redirectTo: "/headquarters"
+            templateUrl: 'app/views/products.html',
+            controller: 'cvProducts',
+            controllerAs: 'vmProducts'
         });
 
 }

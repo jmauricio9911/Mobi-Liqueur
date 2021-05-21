@@ -11,19 +11,19 @@
 angular.module('app.master', [])
     .factory('masterData', masterData);
 
-masterData.$inject = ['$http'];
+masterData.$inject = ['$http', '$rootScope'];
 
-function masterData($http) {
+function masterData($http, $rootScope) {
 
     // DESTINATION SCP
-    // const URL = window.location.href.split("/webapp")[0] + "/myDestination"; 
+    // const URL = window.location.href.split("/webapp")[0] + "/myDestination";
 
     // Local
     const URL = "http://localhost:3000/";
 
     var service = {
-        getHeadquartersByID: getHeadquartersByID,
-        getHeadquarters: getHeadquarters,
+        getLoginByID: getLoginByID,
+        getLogin: getLogin,
         getData: getData,
         getDataById: getDataById,
         send: send,
@@ -36,16 +36,17 @@ function masterData($http) {
         CreatePromotions: CreatePromotions,
         CreteCabeceraVenta: CreteCabeceraVenta,
         CreteCabeceradetalle: CreteCabeceradetalle,
-        sentmail: sentmail
+        sentmail: sentmail,
+        ValidateSession: ValidateSession
     };
     return service;
 
-    function getHeadquarters() {
-        return getData("/api/headquarters");
+    function getLogin() {
+        return getData("/api/login");
     }
 
-    function getHeadquartersByID(urlHeadquarters) {
-        return getDataById("/api/headquarters/search/findByID?id=", urlHeadquarters);
+    function getLoginByID(urlLogin) {
+        return getDataById("/api/login/search/findByID?id=", urlLogin);
     }
 
     function getPromotions() {
@@ -180,5 +181,15 @@ function masterData($http) {
             );
             return data;
         });
+    }
+
+    function ValidateSession() {
+        if (localStorage.getItem('Authenticate') == 'true') {
+            $rootScope.session = true;
+        }
+        $rootScope.product = false;
+        if ($rootScope.session !== true) {
+            location.href = "#login";
+        }
     }
 }
