@@ -60,9 +60,9 @@ function config($routeProvider) {
             controllerAs: 'cvFactura'
         })
         .otherwise({
-            templateUrl: 'app/views/products.html',
-            controller: 'cvProducts',
-            controllerAs: 'vmProducts'
+            templateUrl: 'app/views/login.html',
+            controller: 'cvLogin',
+            controllerAs: 'vmLogin'
         });
 
 }
