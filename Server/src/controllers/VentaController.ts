@@ -26,7 +26,7 @@ class VentaController {
 
     public async getday(req: Request, res: Response): Promise<any> {
         const { fecha } = req.params;
-        const data = await pool.query(`SELECT COUNT(idFactura) FROM venta WHERE Fecha = ${fecha}`);
+        const data = await pool.query(`SELECT COUNT(idFactura)as"Num" FROM venta WHERE Fecha = "${fecha}"`);
         if (data.length > 0) {
             return res.json(data);
         }

@@ -41,7 +41,6 @@ function cvProducts(masterData, $rootScope, global) {
      * @descripcion Adicionar item a el detalle del carrito**/
 
     function addCant(cant) {
-        vmProducts.cantidad = vmProducts.cantidad + cant; //Cantidad global de items
         var cantidad = cant;
         global.car_cant = vmProducts.cantidad; //Cantidad Global
         //Organizamos detalle para la venta
@@ -54,9 +53,9 @@ function cvProducts(masterData, $rootScope, global) {
         };
 
         global.detalle.push(detalle); //Agremaos el item a el detalle de la factura.
+        $rootScope.cantidad = global.detalle.length;
         $("#Cancelar").trigger("click"); //Cerranos Ventana modal
         vmProducts.cantProducto = 0; //Recalcilamos cantidad para cada uno de los productos.
-        console.log(global.detalle);
     }
 
     function items(item) {

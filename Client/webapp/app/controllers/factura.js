@@ -20,6 +20,7 @@ function cvFactura(masterData, global, $scope) {
     cvFactura.actualizar = actualizar;
     cvFactura.buscarCliente = buscarCliente;
     cvFactura.guardar_factura = guardar_factura;
+    cvFactura.cancelar_orden = cancelar_orden;
     /*Variables tipo obejto del controlador*/
     cvFactura.agregar = {
         producto_id: "",
@@ -283,6 +284,46 @@ function cvFactura(masterData, global, $scope) {
 
             });
     }
+
+    /**
+     * @Autor Mauricio Urriola
+     * @Fecha 16.05.2021
+     * @descripcion Funcion para Cancelar el pedido y limpiar las variables-*/
+    function cancelar_orden() {
+        swal({
+                title: "Estas seguro?",
+                text: "Seguro que desea cancelar la orden?",
+                type: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    global.detalle = [];
+                    cvFactura.detalle = [];
+                    cvFactura.detallefac = true;
+                    cvFactura.cliente = {};
+                    cvFactura.comentario = "";
+                    cvFactura.idFact = 0;
+                    cvFactura.cuerpo = "";
+                    cvFactura.agregar = {
+                        producto_id: "",
+                        cantidad: 0
+                    };
+                    cvFactura.valores = {
+                        monto: 0,
+                        monto_neto: 0,
+                        impuesto: 0,
+                        ISV: 0
+                    };
+
+                    $scope.$apply();
+                } else {
+                    console.log(no)
+                }
+            });
+    }
+
     /**
      * @Autor Mauricio Urriola
      * @Fecha 16.05.2021

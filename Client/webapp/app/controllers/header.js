@@ -6,7 +6,7 @@ cvHeader.$inject = ['$scope', '$rootScope', 'global'];
 function cvHeader($scope, $rootScope, global) {
 
     var cvHeader = this;
-    cvHeader.cantidad = global.car_cant;
+    $rootScope.cantidad = 0;
     $rootScope.product = false;
     $scope.init = function() {
         //Funcion inicial 
