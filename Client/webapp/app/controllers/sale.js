@@ -2,24 +2,41 @@ angular.module('app.cvSale', [])
     .controller('cvSale', cvSale);
 
 /*Inyección de dependencia*/
-cvSale.$inject = ['masterData', 'global'];
+cvSale.$inject = ['masterData', 'global', '$rootScope', 'PagerService'];
 
-function cvSale(masterData, global) {
+function cvSale(masterData, global, $rootScope, PagerService) {
     /*Miembros del controlador*/
     var vmSale = this;
+    $rootScope._ = _;
     vmSale.goToPage = goToPage;
     vmSale.getSaleOne = getSaleOne;
     vmSale.dataSale = [];
     masterData.ValidateSession()
-    
-    vmSale.init = function () {
+
+    vmSale.dummyItems; // dummy array of items to be paged
+    vmSale.pager = {};
+    vmSale.setPage = setPage;
+
+
+    vmSale.init = function() {
         //Funcion inicial 
         vmSale.master = [];
         vmSale.master.ListSale = [];
         vmSale.master.ListDetailSale = [];
         getSale();
         validateDataTable();
+        // initialize to page 1
     };
+
+    function setPage(page) {
+        if (page < 1 || page > vmSale.pager.totalPages) {
+            return;
+        }
+        // get pager object from service
+        vmSale.pager = PagerService.GetPager(vmSale.master.ListSale.length, page);
+        // get current page of items
+        vmSale.items = vmSale.dummyItems.slice(vmSale.pager.startIndex, vmSale.pager.endIndex + 1);
+    }
 
     function goToPage(page) {
         location.href = "#" + page;
@@ -32,6 +49,8 @@ function cvSale(masterData, global) {
                 data.data.forEach(element => {
                     vmSale.master.ListSale.push(element);
                 });
+                vmSale.dummyItems = vmSale.master.ListSale;
+                vmSale.setPage(1);
             });
     }
 
