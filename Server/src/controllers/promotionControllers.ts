@@ -6,7 +6,7 @@ import pool from '../database';
 class PromotionController {
 
     public async list(req: Request, res: Response): Promise<void> {
-        const promotions = await pool.query(`SELECT a.idPromocion, a.Descuento, a.FechaInicio, a.FechaFin, a.Estado, b.Nombre
+        const promotions = await pool.query(`SELECT a.idPromocion, a.Descuento, a.FechaInicio, a.FechaFin, a.Estado, a.Producto_idProducto,b.Nombre
                                              FROM promocion AS a INNER JOIN producto AS b 
                                              ON a.Producto_idProducto = b.idProducto`);
         res.json(promotions);

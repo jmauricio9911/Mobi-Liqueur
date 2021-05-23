@@ -14,11 +14,12 @@ function cvProducts(masterData, $rootScope, global) {
     vmProducts.cantidad = global.car_cant;
     vmProducts.addCant = addCant;
     vmProducts.items = items;
-
+    vmProducts.ListPromotions = [];
     vmProducts.init = function() {
         //Funcion inicial
         $rootScope.product = true;
         getProducts();
+        getPromociones();
     };
 
     function goToPage(page) {
@@ -32,9 +33,19 @@ function cvProducts(masterData, $rootScope, global) {
                 data.data.forEach(element => {
                     vmProducts.products.push(element)
                 });
+                console.log(vmProducts.products);
             });
     }
 
+    function getPromociones() {
+        masterData.getPromotions()
+            .then(function(data) {
+                data.data.forEach((element) => {
+                    vmProducts.ListPromotions.push(element);
+                });
+                console.log(vmProducts.ListPromotions);
+            });
+    }
     /**
      * @Autor Mauricio Urriola
      * @Fecha 16.05.2021
@@ -42,6 +53,15 @@ function cvProducts(masterData, $rootScope, global) {
 
     function addCant(cant) {
         var cantidad = cant;
+        if (cant > vmProducts.producto.Cantidad) {
+            swal({
+                title: "Error",
+                text: "La cantidad indicada supera el maximo del producto.",
+                icon: "error",
+                buttons: true,
+            });
+            return;
+        }
         global.car_cant = vmProducts.cantidad; //Cantidad Global
         //Organizamos detalle para la venta
         var detalle = {
@@ -49,9 +69,21 @@ function cvProducts(masterData, $rootScope, global) {
             Nombre: vmProducts.producto.Nombre,
             cantidad: cantidad,
             valor: vmProducts.producto.ValorUnitario,
-            cantidadPr: vmProducts.producto.Cantidad
+            cantidadPr: vmProducts.producto.Cantidad,
+            promosion: 0
         };
-
+        //Validamos si el producto seleccionado tienen promocion vigente
+        var promosion = vmProducts.ListPromotions.find(element => element.Producto_idProducto === vmProducts.producto.idProducto);
+        var hoy = new Date();
+        if (promosion) {
+            //Validamos que la fecha de la promocion sea vigente
+            var fechapromocion = new Date(promosion.FechaFin);
+            if (fechapromocion.getTime() >= hoy.getTime()) {
+                detalle.promosion = promosion.Descuento;
+            } else {
+                detalle.promosion = 0;
+            }
+        }
         global.detalle.push(detalle); //Agremaos el item a el detalle de la factura.
         $rootScope.cantidad = global.detalle.length;
         $("#Cancelar").trigger("click"); //Cerranos Ventana modal

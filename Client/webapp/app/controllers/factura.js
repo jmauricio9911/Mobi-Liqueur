@@ -14,6 +14,7 @@ function cvFactura(masterData, global, $scope) {
     cvFactura.comentario = "";
     cvFactura.idFact = 0;
     cvFactura.cuerpo = "";
+    cvFactura.ListPromotions = [];
     /*Variables tipo funcion del controlador*/
     cvFactura.borrar_detalle = borrar_detalle;
     cvFactura.buscarProducto = buscarProducto;
@@ -35,7 +36,9 @@ function cvFactura(masterData, global, $scope) {
 
     cvFactura.init = function() {
         //Función inicial
+        masterData.ValidateSession();
         getDetalleVenta();
+        getPromociones();
         cvFactura.hoy = new Date();
         cvFactura.config = global.config;
     };
@@ -52,6 +55,7 @@ function cvFactura(masterData, global, $scope) {
         cvFactura.detalle = global.detalle;
         if (cvFactura.detalle.length !== 0) {
             cvFactura.detallefac = false;
+            console.log(cvFactura.detalle);
             recalcular();
         }
     }
@@ -81,8 +85,21 @@ function cvFactura(masterData, global, $scope) {
                     Nombre: item.Nombre,
                     cantidad: 0,
                     valor: item.ValorUnitario,
-                    cantidadPr: item.Cantidad
+                    cantidadPr: item.Cantidad,
+                    promosion: 0
                 };
+                //Validamos si el producto seleccionado tienen promocion vigente
+                var promosion = cvFactura.ListPromotions.find(element => element.Producto_idProducto === item.idProducto);
+                var hoy = new Date();
+                if (promosion) {
+                    //Validamos que la fecha de la promocion sea vigente
+                    var fechapromocion = new Date(promosion.FechaFin);
+                    if (fechapromocion.getTime() >= hoy.getTime()) {
+                        producto.promosion = promosion.Descuento;
+                    } else {
+                        producto.promosion = 0;
+                    }
+                }
                 if (cvFactura.detalle.length !== 0) {
                     validaritem(producto);
                 } else {
@@ -92,6 +109,16 @@ function cvFactura(masterData, global, $scope) {
             });
 
 
+    }
+
+    function getPromociones() {
+        masterData.getPromotions()
+            .then(function(data) {
+                data.data.forEach((element) => {
+                    cvFactura.ListPromotions.push(element);
+                });
+                console.log(cvFactura.ListPromotions);
+            });
     }
     /**
      * @Autor Mauricio Urriola
@@ -120,7 +147,9 @@ function cvFactura(masterData, global, $scope) {
         cvFactura.valores.monto = 0;
 
         for (item of cvFactura.detalle) {
-            cvFactura.valores.monto += item.valor * item.cantidad;
+            var valoritem = item.cantidad * item.valor;
+            var descuento = valoritem * item.promosion / 100;
+            cvFactura.valores.monto += item.valor * item.cantidad - descuento;
         }
 
         cvFactura.valores.impuesto = cvFactura.valores.monto * cvFactura.valores.ISV;
@@ -222,7 +251,6 @@ function cvFactura(masterData, global, $scope) {
                     "valor": cvFactura.detalle[index].cantidad * cvFactura.detalle[index].valor
                 }
                 //Actualizamos la cantidad de los productos
-            debugger;
             cantidadreal = cvFactura.detalle[index].cantidadPr - cvFactura.detalle[index].cantidad;
             idPr = cvFactura.detalle[index].Id;
             updateCantidad(cantidadreal, idPr);
