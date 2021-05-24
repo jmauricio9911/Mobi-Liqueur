@@ -29,6 +29,11 @@ function config($routeProvider) {
             controller: 'cvUser',
             controllerAs: 'vmUser'
         })
+        .when('/restorePassword/:id', {
+            templateUrl: 'app/views/restorePassword.html',
+            controller: 'cvRestore',
+            controllerAs: 'vmRestore'
+        })
         .when('/products', {
             templateUrl: 'app/views/products.html',
             controller: 'cvProducts',
@@ -44,7 +49,7 @@ function config($routeProvider) {
             controller: 'cvAdminProducts',
             controllerAs: 'vmAdminProducts'
         })
-        .when('/promosion', {
+        .when('/promotion', {
             templateUrl: 'app/views/promotion.html',
             controller: 'cvPromotion',
             controllerAs: 'cvPromotion'

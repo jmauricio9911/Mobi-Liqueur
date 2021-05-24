@@ -6,10 +6,10 @@ import pool from '../database';
 class VentaController {
 
     public async list(req: Request, res: Response): Promise<void> {
-        const { fecha } = req.params;
-        console.log(fecha);
+        // const { fecha } = req.params;
+        // console.log(fecha);
         const ventas = await pool.query(`SELECT idFactura, Fecha, Total, Observacion, c.Nombre as cliente FROM venta v INNER JOIN cliente c 
-        ON v.Cliente_idCliente = c.idCliente where v.Fecha = '${fecha}' `);
+        ON v.Cliente_idCliente = c.idCliente order by Fecha desc`);
         res.json(ventas);
     }
 

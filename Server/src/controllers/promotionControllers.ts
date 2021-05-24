@@ -14,10 +14,9 @@ class PromotionController {
 
     public async getOne(req: Request, res: Response): Promise<any> {
         const { id } = req.params;
-        const games = await pool.query( `SELECT a.idPromocion, a.Descuento, a.FechaInicio, a.FechaFin, a.Estado, b.Nombre
+        const games = await pool.query( `SELECT a.idPromocion, a.Descuento, a.FechaInicio, a.FechaFin, a.Estado, b.Nombre, b.idProducto AS Producto_idProducto
                                          FROM promocion as a INNER JOIN producto AS b 
-                                         on a.Producto_id = b.idProducto where a.idPromocion = ?`, [id]);
-        console.log(games.length);
+                                         on a.Producto_idProducto = b.idProducto where a.idPromocion = ?`, [id]);
         if (games.length > 0) {
             return res.json(games[0]);
         }

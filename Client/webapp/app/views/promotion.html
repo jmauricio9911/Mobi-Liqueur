@@ -1,9 +1,10 @@
 <div class="container-fluid" ng-init="cvPromotion.init()">
 
-    <h3>Administrar promosiones</h3>
+    <h3>Administrar promociones</h3>
     <hr>
 
     <div class="row container">
+        <!-- tabla -->
         <div class="col-md-8">
             <div class="row">
                 Busqueda:
@@ -44,18 +45,21 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-md-4" ng-show="cvPromotion.Formulario">
+        <!-- formulario -->
+        <div class="col-md-4">
 
-            <form name="formulario" ng-submit="cvPromotion.savedata(cvPromotion.Promotions)" novalidate="novalidate">
+            <form name="formulario" ng-submit="cvPromotion.saveData(cvPromotion.Promotions)" novalidate="novalidate">
 
-                <div class="form-group">
+                <div class="form-group" ng-show="cvPromotion.Formulario">
                     <label for="nombre" class="control-label">Indicador</label>
                     <input type="text" id="nombre" class="form-control" name="nombre" ng-model="cvPromotion.Promotions.idPromocion" disabled>
                 </div>
 
                 <div class="form-group">
-                    <label for="nombre" class="control-label">Producto</label>
-                    <input type="text" id="Producto" class="form-control" name="Producto" ng-model="cvPromotion.Promotions.Nombre" required>
+                    <label class="control-label">Producto</label>
+                    <select name="rol" class="form-control" ng-model="cvPromotion.Promotions.Producto_idProducto">
+                        <option ng-repeat="option in cvPromotion.products" value="{{option.idProducto}}">{{option.Nombre}}</option>
+                    </select>
                 </div>
 
                 <div class="form-group">
@@ -73,7 +77,8 @@
                     <input type="date" id="email" class="form-control" name="email" ng-model="cvPromotion.Promotions.FechaFin" required>
                 </div>
 
-                <button type="submit" class="btn btn-primary"> Guardar</button>
+                <button type="submit" class="btn btn-primary"> {{cvPromotion.btnAction}}</button>
+                <button type="reset" class="btn btn-default" ng-click="cvPromotion.clearForm()" ng-show="cvPromotion.Formulario"> Cancelar</button>
             </form>
 
         </div>

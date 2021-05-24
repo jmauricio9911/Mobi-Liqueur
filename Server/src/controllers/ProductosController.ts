@@ -10,6 +10,13 @@ class GamesController {
         res.json(productos);
     }
 
+    public async listActive(req: Request, res: Response): Promise<void> {
+        const productos = await pool.query(`SELECT idProducto, 'producto' AS typeProduct, Nombre, Cantidad, ValorUnitario, NombreImagen  FROM producto p WHERE Estado=1 AND Cantidad > 0
+                                            UNION ALL
+                                            SELECT idCombo, 'combo' AS typeProduct, Nombre, '---', valor, 'combo.png'  FROM combo c WHERE Estado=1`);
+        res.json(productos);
+    }
+
     public async getOne(req: Request, res: Response): Promise<any> {
         const { id } = req.params;
         const data = await pool.query('SELECT * FROM producto WHERE idProducto = ?', [id]);
