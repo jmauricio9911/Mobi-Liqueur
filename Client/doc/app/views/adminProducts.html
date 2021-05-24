@@ -1,0 +1,95 @@
+<div class="container-fluid" ng-init="vmAdminProducts.init()">
+    <h3>Administrar productos</h3>
+    <hr>
+    <div class="row container">
+        <div class="col-md-8">
+            <div class="row">
+                Búsqueda:
+                <input type="text" name="busqueda" ng-model="busqueda.Nombre" class="form-control" placeholder="Ingrese lo que desea buscar">
+                <br> Estado:
+                <br>
+                <select ng-model="busqueda.Estado" class="form-control">
+                    <option value="">Cualquiera</option>
+                    <option value="0">Activo</option>
+                    <option value="1">Inactivo</option>
+                </select>
+                <br>
+            </div>
+            <table class="table table-striped" id="tableProduct">
+                <thead>
+                    <!-- On rows -->
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Cantidad</th>
+                        <th>Valor unitario</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <!-- On cells (`td` or `th`) -->
+                <tbody>
+                    <tr ng-repeat="item in vmAdminProducts.master.ListProducts | filter:busqueda | orderBy:columna: reverse">
+                        <td>{{item.Nombre}}</td>
+                        <td>{{item.Cantidad}}</td>
+                        <td>{{item.ValorUnitario | currency:"$":0}}</td>
+                        <td><span ng-class="{'glyphicon glyphicon-ok': item.Estado == '1',
+                            'glyphicon glyphicon-remove': item.Estado == '0'}"></span></td>
+                        <td><button class="btn btn-primary" ng-click="vmAdminProducts.getAdminProductOne(item.idProducto)">
+                                Editar
+                            </button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-4">
+
+            <form name="formulario" ng-submit="vmAdminProducts.updateData (vmAdminProducts.dataProducts)" novalidate="novalidate">
+                <div class="form-group" ng-show="vmAdminProducts.Formulario">
+                    <label for="id" class="control-label">Identificador</label>
+                    <input type="text" id="id" class="form-control" name="id" ng-model="vmAdminProducts.dataProducts.id" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label for="nombre" class="control-label">Nombre</label>
+                    <input type="text" id="nombre" class="form-control" name="nombre" ng-model="vmAdminProducts.dataProducts.Nombre" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="nombre" class="control-label">Cantidad</label>
+                    <input type="text" id="Producto" class="form-control" name="Producto" ng-model="vmAdminProducts.dataProducts.Cantidad" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="edad" class="control-label">ValorUnitario</label>
+                    <input type="number" id="edad" class="form-control" ng-model="vmAdminProducts.dataProducts.ValorUnitario" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="edad" class="control-label">NombreImagen</label>
+                    <input type="file" id="edad" ng-model="vmAdminProducts.dataProducts.NombreImagen" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label btn btn-default">
+                        Activo <input type="checkbox" ng-model="vmAdminProducts.dataProducts.Estado" required>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="control-label">FechaVencimiento</label>
+                    <input type="date" id="email" class="form-control" name="email" ng-model="vmAdminProducts.dataProducts.FechaVencimiento" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary"> {{vmAdminProducts.btnAction}}</button>
+                <button type="reset" class="btn btn-default" ng-click="vmAdminProducts.clearForm()" ng-show="vmAdminProducts.Formulario"> Cancelar</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+<!-- <script type="text/javascript">
+    $(document).ready(function()
+    {
+        $('#tableProduct').dataTable();
+    });
+</script> -->

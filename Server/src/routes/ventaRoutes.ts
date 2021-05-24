@@ -11,7 +11,7 @@ class ventaRoutes {
     }
 
     config() {
-        this.router.get('/', ventaController.list);
+        this.router.get('/detalle/:fecha', ventaController.list);
         this.router.get('/:id', ventaController.getOne);
         this.router.get('/facturas/:fecha', ventaController.getday);
         this.router.post('/', ventaController.create);

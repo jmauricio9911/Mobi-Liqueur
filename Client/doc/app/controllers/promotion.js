@@ -1,75 +1,65 @@
-angular.module('app.cvSale', [])
-    .controller('cvSale', cvSale);
+angular.module('app.Promotion', ['jcs-autoValidate', 'app.global'])
+    .controller('cvPromotion', cvPromotion);
 
-/*Inyección de dependencia*/
-cvSale.$inject = ['masterData', 'global', '$rootScope', 'PagerService'];
+/*Injeccion de dependencia*/
+cvPromotion.$inject = ['masterData', 'global'];
 
-function cvSale(masterData, global, $rootScope, PagerService) {
+function cvPromotion(masterData, global) {
     /*Miembros del controlador*/
-    var vmSale = this;
-    $rootScope._ = _;
-    vmSale.goToPage = goToPage;
-    vmSale.getSaleOne = getSaleOne;
-    vmSale.dataSale = [];
+    var cvPromotion = this;
+
+    cvPromotion.goToPage = goToPage;
     masterData.ValidateSession()
 
-    vmSale.dummyItems; // dummy array of items to be paged
-    vmSale.pager = {};
-    vmSale.setPage = setPage;
-
-
-    vmSale.init = function() {
+    cvPromotion.init = function() {
         //Funcion inicial 
-        vmSale.master = [];
-        vmSale.master.ListSale = [];
-        vmSale.master.ListDetailSale = [];
-        getSale();
+        cvPromotion.master = [];
+        cvPromotion.master.ListPromotions = []; //Promosiones
+        cvPromotion.Promotions = []; //Promosiones
+        cvPromotion.Formulario = false; //Manejo de formulario
+        getPromotionsList();
+        cvPromotion.getPromotionOne = getPromotionOne;
+        cvPromotion.savedata = savedata;
         validateDataTable();
-        // initialize to page 1
     };
-
-    function setPage(page) {
-        if (page < 1 || page > vmSale.pager.totalPages) {
-            return;
-        }
-        // get pager object from service
-        vmSale.pager = PagerService.GetPager(vmSale.master.ListSale.length, page);
-        // get current page of items
-        vmSale.items = vmSale.dummyItems.slice(vmSale.pager.startIndex, vmSale.pager.endIndex + 1);
-    }
 
     function goToPage(page) {
         location.href = "#" + page;
     }
 
-    // Función de ejemplo para obtener datos
-    function getSale() {
-        var fecha = new Date();
-        fecha = fecha.toLocaleDateString()
-        fecha = fecha.split("/");
-        var fn = fecha[2] + "-" + fecha[1] + "-" + fecha[0];
-        masterData.getData(`api/venta/detalle/${fn}`)
+    // Funcion para obtener lista de promociones
+    function getPromotionsList() {
+        masterData.getPromotions()
             .then(function(data) {
-                data.data.forEach(element => {
-                    vmSale.master.ListSale.push(element);
-                });
-                vmSale.dummyItems = vmSale.master.ListSale;
-                vmSale.setPage(1);
-            });
-    }
-
-    //Función para obtener un venta
-    function getSaleOne(sale) {
-        vmSale.master.ListDetailSale = []
-        vmSale.dataSale = sale
-        masterData.getDataById('api/venta/', sale.idFactura)
-            .then(function(data) {
-                data.data.forEach(element => {
-                    vmSale.master.ListDetailSale.push(element);
+                data.data.forEach((element) => {
+                    cvPromotion.master.ListPromotions.push(element);
                 });
             });
     }
 
+    //Funcion para obtener una promosion
+    function getPromotionOne(id) {
+        cvPromotion.Formulario = true; //Manejo de formulario
+        masterData.getPromotionsOne(id)
+            .then(function(data) {
+                cvPromotion.Promotions = data.data
+                console.log(cvPromotion.Promotions)
+            });
+    }
+
+    //Funcion para guardar datos
+    function savedata(data) {
+        masterData.UpdatePromotions(data.idPromocion, data)
+            .then(function(data) {
+                if (data.data.message) {
+                    swal("Exito", data.data.message, "success");
+                } else {
+                    swal('Error');
+                }
+
+            });
+
+    }
     /**
      * @Funcion : configDatatable
      * @Descripcion : Configuracion basica para dataTable en español ect.
@@ -79,7 +69,7 @@ function cvSale(masterData, global, $rootScope, PagerService) {
     function configDatatable() {
 
         $(document).ready(function() {
-            $('#tableSent').DataTable({
+            $('#promotions').DataTable({
                 "bFilter": false,
                 "scrollY": "400px", //Tamaño de sroll
                 "scrollCollapse": true, //Activamos el Scroll lateral
@@ -114,9 +104,9 @@ function cvSale(masterData, global, $rootScope, PagerService) {
      */
     function validateDataTable() {
         //Validamos si la tabla ya es DataTable para destuirla y reiniciarla.
-        if ($.fn.DataTable.isDataTable('#tableSent')) {
+        if ($.fn.DataTable.isDataTable('#promotions')) {
             //Destruimos dataTable
-            $('#tableSent').DataTable().destroy();
+            $('#promotions').DataTable().destroy();
             //Iniciamos nuevamente la configuracion DataTable
             configDatatable();
         } else {
@@ -124,5 +114,4 @@ function cvSale(masterData, global, $rootScope, PagerService) {
             configDatatable();
         }
     }
-
 }
