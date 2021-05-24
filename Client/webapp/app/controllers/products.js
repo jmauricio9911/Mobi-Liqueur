@@ -28,7 +28,7 @@ function cvProducts(masterData, $rootScope, global) {
 
     // Función de ejemplo para obtener datos
     function getProducts() {
-        masterData.getData('api/producto')
+        masterData.getData('api/producto/detail/')
             .then(function(data) {
                 data.data.forEach(element => {
                     vmProducts.products.push(element)

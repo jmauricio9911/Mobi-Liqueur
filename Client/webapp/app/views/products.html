@@ -8,15 +8,15 @@
                     <p>{{item.ValorUnitario | currency:"$":0}}<br>Cantidad Disponible: {{item.Cantidad}}</text>
                     </p>
                     <p>
+                        <p style="color: red" role="alert" ng-show="item.Cantidad <= 0">
+                            Producto agotado!
+                        </p>
+                        <p style="color: red" role="alert" ng-show="item.Cantidad  == 5 || item.Cantidad  == 4 || item.Cantidad  == 3 || item.Cantidad  == 2 || item.Cantidad  == 1">
+                            Quedan pocas unidades!
+                        </p>
                         <button href="#" class="btn btn-success" data-toggle="modal" data-target="#myModal" role="button" ng-click="vmProducts.items(item)">Agregar <span class="glyphicon glyphicon-shopping-cart"></span></button>
                         <!-- <button class="btn btn-default" role="button">Cancelar</button> -->
                     </p>
-                </div>
-                <div class="alert alert-danger" role="alert" ng-show="item.Cantidad <= 0">
-                    Producto agotado!
-                </div>
-                <div class="alert alert-warning" role="alert" ng-show="item.Cantidad  === 5 || item.Cantidad  === 4 || item.Cantidad  === 3 || item.Cantidad  === 2 || item.Cantidad  === 1">
-                    Quedan pocas unidades!
                 </div>
             </div>
         </div>

@@ -7,16 +7,16 @@
         <!-- tabla -->
         <div class="col-md-8">
             <div class="row">
-                Busqueda:
+                Búsqueda:
                 <input type="text" name="busqueda" ng-model="busqueda.Nombre" class="form-control" placeholder="Ingrese lo que desea buscar">
-                <br> Estado:
+                <!-- <br> Estado:
                 <br>
                 <select ng-model="busqueda.Estado" class="form-control">
                     <option value="">Cualquiera</option>
                     <option value="0">Activo</option>
                     <option value="1">Inactivo</option>
                 </select>
-                <br>
+                <br> -->
             </div>
 
             <table class="table table-striped" id="promotions">
@@ -32,9 +32,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="promotion in cvPromotion.master.ListPromotions | filter:busqueda | orderBy:columna: reverse ">
+                    <tr ng-repeat="promotion in cvPromotion.items | filter:busqueda | orderBy:columna: reverse ">
                         <th>{{promotion.idPromocion}}</th>
-                        <td>{{promotion.Descuento}}</td>
+                        <td>{{promotion.Descuento}} %</td>
                         <td>{{promotion.Nombre}}</td>
                         <td>{{promotion.FechaInicio | date:"dd/MM/yyyy" }}</td>
                         <td>{{promotion.FechaFin | date:"dd/MM/yyyy" }}</td>
@@ -44,6 +44,24 @@
                     </tr>
                 </tbody>
             </table>
+            <!-- pager -->
+            <ul ng-if="cvPromotion.pager.pages.length" class="pagination">
+                <li ng-class="{disabled:cvPromotion.pager.currentPage === 1}">
+                    <a ng-click="cvPromotion.setPage(1)">First</a>
+                </li>
+                <li ng-class="{disabled:cvPromotion.pager.currentPage === 1}">
+                    <a ng-click="cvPromotion.setPage(cvPromotion.pager.currentPage - 1)">Previous</a>
+                </li>
+                <li ng-repeat="page in cvPromotion.pager.pages" ng-class="{active:cvPromotion.pager.currentPage === page}">
+                    <a ng-click="cvPromotion.setPage(page)">{{page}}</a>
+                </li>
+                <li ng-class="{disabled:cvPromotion.pager.currentPage === cvPromotion.pager.totalPages}">
+                    <a ng-click="cvPromotion.setPage(cvPromotion.pager.currentPage + 1)">Next</a>
+                </li>
+                <li ng-class="{disabled:cvPromotion.pager.currentPage === cvPromotion.pager.totalPages}">
+                    <a ng-click="cvPromotion.setPage(cvPromotion.pager.totalPages)">Last</a>
+                </li>
+            </ul>
         </div>
         <!-- formulario -->
         <div class="col-md-4">
@@ -63,7 +81,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="edad" class="control-label">Descuento</label>
+                    <label for="edad" class="control-label">Descuento (%)</label>
                     <input type="number" id="edad" class="form-control" ng-model="cvPromotion.Promotions.Descuento" required>
                 </div>
 

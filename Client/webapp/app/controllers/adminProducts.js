@@ -2,9 +2,9 @@ angular.module('app.cvAdminProducts', [])
     .controller('cvAdminProducts', cvAdminProducts);
 
 /*Inyección de dependencia*/
-cvAdminProducts.$inject = ['masterData', 'global'];
+cvAdminProducts.$inject = ['masterData', 'global', 'PagerService'];
 
-function cvAdminProducts(masterData, global) {
+function cvAdminProducts(masterData, global, PagerService) {
     /*Miembros del controlador*/
     var vmAdminProducts = this;
     vmAdminProducts.goToPage = goToPage;
@@ -17,26 +17,41 @@ function cvAdminProducts(masterData, global) {
     vmAdminProducts.btnAction = 'Guardar';
     masterData.ValidateSession()
 
+    vmAdminProducts.dummyItems; // dummy array of items to be paged
+    vmAdminProducts.pager = {};
+    vmAdminProducts.setPage = setPage;
 
     vmAdminProducts.init = function() {
         //Funcion inicial 
         vmAdminProducts.master = [];
         vmAdminProducts.master.ListProducts = [];
         getAdminProducts();
-        validateDataTable();
     };
 
     function goToPage(page) {
         location.href = "#" + page;
     }
 
+    function setPage(page) {
+        if (page < 1 || page > vmAdminProducts.pager.totalPages) {
+            return;
+        }
+        // get pager object from service
+        vmAdminProducts.pager = PagerService.GetPager(vmAdminProducts.master.ListProducts.length, page);
+        // get current page of items
+        vmAdminProducts.items = vmAdminProducts.dummyItems.slice(vmAdminProducts.pager.startIndex, vmAdminProducts.pager.endIndex + 1);
+    }
+
     // Función de ejemplo para obtener datos
     function getAdminProducts() {
+        vmAdminProducts.master.ListProducts = [];
         masterData.getData('api/producto')
             .then(function(data) {
                 data.data.forEach(element => {
                     vmAdminProducts.master.ListProducts.push(element);
                 });
+                vmAdminProducts.dummyItems = vmAdminProducts.master.ListProducts;
+                vmAdminProducts.setPage(1);
             });
     }
 
@@ -51,14 +66,21 @@ function cvAdminProducts(masterData, global) {
                 } else {
                     vmAdminProducts.dataProducts.Estado = true
                 }
+                vmAdminProducts.dataProducts.FechaVencimiento = convertFormat(data.data.FechaVencimiento);
                 vmAdminProducts.btnAction = 'Actualizar'
             });
+    }
+
+    function convertFormat(date){
+        let newDate = new Date(date)
+        let formatted_date = newDate.getFullYear() + "-" + ("0" + (newDate.getMonth() + 1)).slice(-2) + "-" + ("0" + (newDate.getDate())).slice(-2);
+        return formatted_date;
     }
 
     //Función para guardar datos
     function saveData(dataProduct) {
         if (Object.keys(dataProduct).length > 0) {
-            if (dataProduct.id) {
+            if (dataProduct.idProducto) {
                 updateData(dataProduct)
             } else {
                 var object = {
@@ -74,6 +96,7 @@ function cvAdminProducts(masterData, global) {
                         if (data.data.message) {
                             swal("Exito", data.data.message, "success");
                             getAdminProducts();
+                            clearForm();
                         } else {
                             swal('Error');
                         }
@@ -87,11 +110,12 @@ function cvAdminProducts(masterData, global) {
 
     //Función para actualizar datos
     function updateData(data) {
-        masterData.UpdateData('api/producto/' + data.id, data)
+        masterData.UpdateData('api/producto/' + data.idProducto, data)
             .then(function(data) {
                 if (data.data.message) {
                     swal("Exito", data.data.message, "success");
                     getAdminProducts();
+                    clearForm();
                 } else {
                     swal('Error');
                 }
@@ -104,60 +128,4 @@ function cvAdminProducts(masterData, global) {
         vmAdminProducts.dataProducts = []
         vmAdminProducts.btnAction = 'Guardar'
     }
-
-    /**
-     * @Funcion : configDatatable
-     * @Descripcion : Configuracion basica para dataTable en español ect.
-     * @Fecha : 
-     */
-
-    function configDatatable() {
-
-        $(document).ready(function() {
-            $('#tableProduct').DataTable({
-                "bFilter": false,
-                "scrollY": "400px", //Tamaño de sroll
-                "scrollCollapse": true, //Activamos el Scroll lateral
-                "scrollX": true, //Activamos el Scrol inferior
-
-                "lengthMenu": [
-                    [10, 25, 50, -1],
-                    [10, 25, 50, "Todos"]
-                ],
-                "language": { //Configuracion de lenguaje
-                    "lengthMenu": "Mostrando _MENU_ Registros", //Cantidad de registros a mostrar
-                    "zeroRecords": "No se encontraron registros relacionados", //Texto de busqueda
-                    "info": "Mostrando _PAGE_ pagina de _PAGES_ paginas", //Informacion de la paginacion
-                    "infoEmpty": "No se encuentran registros disponibles", //
-                    "infoFiltered": "(Se realizo busqueda en _MAX_ registros)", //Informacion de busqueda, si no se encuentran registros
-                    "searching": true,
-                    "search": "",
-                    "paging": true,
-                    "paginate": { //Configuracion de botones y paginacion
-                        "next": "Siguiente", //Boton Siguiente
-                        "previous": "Anterior" //Boton Anterior
-                    },
-                }
-            });
-        });
-    }
-
-    /**
-     * @Funcion : validateDataTable
-     * @Descripcion : Funciona para validar si la tabla a mapear es DataTable y no presentar errores al usurio
-     * @Fecha :
-     */
-    function validateDataTable() {
-        //Validamos si la tabla ya es DataTable para destuirla y reiniciarla.
-        if ($.fn.DataTable.isDataTable('#tableProduct')) {
-            //Destruimos dataTable
-            $('#tableProduct').DataTable().destroy();
-            //Iniciamos nuevamente la configuracion DataTable
-            configDatatable();
-        } else {
-            //Iniciamos configuracion
-            configDatatable();
-        }
-    }
-
 }
