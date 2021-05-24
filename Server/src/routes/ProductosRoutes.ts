@@ -11,6 +11,7 @@ class GameRoutes {
     }
 
     config() {
+        this.router.get('/detail/', productoController.listActive);
         this.router.get('/', productoController.list);
         this.router.get('/:id', productoController.getOne);
         this.router.post('/', productoController.create);
