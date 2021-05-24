@@ -1,20 +1,13 @@
 <div class="container-fluid" ng-init="vmSale.init()">
-    <h3>Ventas</h3>
+    <p class="lead animate__animated animate__fadeInUp">
+        <mark>Ventas del día.</mark>
+    </p>
     <hr>
     <div class="row container">
         <div class="col-md-8">
             <div class="row">
                 Búsqueda:
-                <input type="text" name="busqueda" ng-model="busqueda.Nombre" class="form-control"
-                    placeholder="Ingrese lo que desea buscar">
-                <br> Estado:
-                <br>
-                <select ng-model="busqueda.Estado" class="form-control">
-                    <option value="">Cualquiera</option>
-                    <option value="0">Activo</option>
-                    <option value="1">Inactivo</option>
-                </select>
-                <br>
+                <input type="text" name="busqueda" ng-model="busqueda.idFactura" class="form-control" placeholder="Ingrese lo que desea buscar">
             </div>
             <table class="table table-striped" id="tableSale">
                 <thead>
@@ -29,78 +22,97 @@
                 </thead>
                 <!-- On cells (`td` or `th`) -->
                 <tbody>
-                    <tr ng-repeat="item in vmSale.master.ListSale | filter:busqueda | orderBy:columna: reverse">
+                    <tr ng-repeat="item in vmSale.items  | filter:busqueda | orderBy:columna: reverse">
                         <td>{{item.idFactura}}</td>
-                        <td>{{item.Fecha | date:'medium'}}</td>
+                        <td>{{item.Fecha | date:'yyyy-MM-dd'}}</td>
                         <td>{{item.Total | currency:"$":0}}</td>
                         <td>{{item.Observacion}}</td>
                         <td>{{item.cliente}}</td>
-                        <td><button ng-click="vmSale.getSaleOne(item)" class="btn btn-success"  data-toggle="modal" data-target="#myModal" role="button">Detalle</button></td>
+                        <td><button ng-click="vmSale.getSaleOne(item)" class="btn btn-success" data-toggle="modal" data-target="#myModal" role="button">Detalle</button></td>
                     </tr>
                 </tbody>
             </table>
+            <!-- pager -->
+            <ul ng-if="vmSale.pager.pages.length" class="pagination">
+                <li ng-class="{disabled:vmSale.pager.currentPage === 1}">
+                    <a ng-click="vmSale.setPage(1)">First</a>
+                </li>
+                <li ng-class="{disabled:vmSale.pager.currentPage === 1}">
+                    <a ng-click="vmSale.setPage(vmSale.pager.currentPage - 1)">Previous</a>
+                </li>
+                <li ng-repeat="page in vmSale.pager.pages" ng-class="{active:vmSale.pager.currentPage === page}">
+                    <a ng-click="vmSale.setPage(page)">{{page}}</a>
+                </li>
+                <li ng-class="{disabled:vmSale.pager.currentPage === vmSale.pager.totalPages}">
+                    <a ng-click="vmSale.setPage(vmSale.pager.currentPage + 1)">Next</a>
+                </li>
+                <li ng-class="{disabled:vmSale.pager.currentPage === vmSale.pager.totalPages}">
+                    <a ng-click="vmSale.setPage(vmSale.pager.totalPages)">Last</a>
+                </li>
+            </ul>
         </div>
     </div>
+</div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Detalle de la venta</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="col-md-12">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Factura</th>
-                                    <th>Fecha</th>
-                                    <th>Total</th>
-                                    <th>Cliente</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{{vmSale.dataSale.idFactura}}</td>
-                                    <td>{{vmSale.dataSale.Fecha | date:'medium'}}</td>
-                                    <td>{{vmSale.dataSale.Total | currency:"$":0}}</td>
-                                    <td>{{vmSale.dataSale.cliente}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="col-md-12">
-                            <label for="">Observación</label></br>
-                            <label>{{vmSale.dataSale.Observacion}}</label>
-                        </div>
-                    </div>
-                    </br>
-                    <label>Detalle venta</label>
-                    <table class="table table-striped" id="tableSale">
+                <h4 class="modal-title" id="myModalLabel">Detalle de la venta</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <table class="table table-striped">
                         <thead>
-                            <!-- On rows -->
                             <tr>
-                                <th>Producto</th>
-                                <th>Cantidad</th>
-                                <th>Valor</th>
+                                <th>Factura</th>
+                                <th>Fecha</th>
+                                <th>Total</th>
+                                <th>Cliente</th>
                             </tr>
                         </thead>
-                        <!-- On cells (`td` or `th`) -->
                         <tbody>
-                            <tr ng-repeat="item in vmSale.master.ListDetailSale | filter:busqueda | orderBy:columna: reverse">
-                                <td>{{item.Nombre}}</td>
-                                <td>{{item.Cantidad}}</td>
-                                <td>{{item.valor | currency:"$":0}}</td>
+                            <tr>
+                                <td>{{vmSale.dataSale.idFactura}}</td>
+                                <td>{{vmSale.dataSale.Fecha | date:'medium'}}</td>
+                                <td>{{vmSale.dataSale.Total | currency:"$":0}}</td>
+                                <td>{{vmSale.dataSale.cliente}}</td>
                             </tr>
                         </tbody>
                     </table>
+                    <div class="col-md-12">
+                        <label for="">Observación</label></br>
+                        <label>{{vmSale.dataSale.Observacion}}</label>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                </div>
+                </br>
+                <label>Detalle venta</label>
+                <table class="table table-striped" id="tableSale">
+                    <thead>
+                        <!-- On rows -->
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <!-- On cells (`td` or `th`) -->
+                    <tbody>
+                        <tr ng-repeat="item in vmSale.master.ListDetailSale | filter:busqueda | orderBy:columna: reverse">
+                            <td>{{item.Nombre}}</td>
+                            <td>{{item.Cantidad}}</td>
+                            <td>{{item.valor | currency:"$":0}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>
+</div>
 </div>

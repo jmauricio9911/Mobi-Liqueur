@@ -225,3 +225,7 @@ input[type=password]:focus {
 #cont_docs {
     margin: 15px 15px;
 }
+
+a {
+    cursor: pointer;
+}
