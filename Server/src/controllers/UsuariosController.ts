@@ -6,7 +6,7 @@ import pool from '../database';
 class UserController {
 
     public async list(req: Request, res: Response): Promise<void> {
-        const usuarios = await pool.query('SELECT * FROM usuario');
+        const usuarios = await pool.query('SELECT u.*, TipoRol, Estado FROM usuario u join rol r on r.idRol = u.Rol_idRol');
         res.json(usuarios);
     }
 

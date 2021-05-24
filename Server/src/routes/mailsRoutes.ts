@@ -12,6 +12,7 @@ class mailsRoutes {
 
     config() {
         this.router.post('/', emialController.enviarFactura);
+        this.router.put('/restorePassword/', emialController.sendRestore);
     }
 
 }
