@@ -5,35 +5,55 @@
         <!-- tabla -->
         <div class="col-md-8">
             <div class="row">
-                <table class="table table-striped" id="tableCombo">
-                    <thead>    
-                        <!-- On rows -->
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Valor</th>
-                            <th>Estado</th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <!-- On cells (`td` or `th`) -->
-                    <tbody>
-                        <tr ng-repeat="item in vmCombo.master.ListCombo | filter:busqueda | orderBy:columna: reverse">
-                            <td>{{item.Nombre}}</td>
-                            <td>{{item.Valor | currency }}</td>
-                            <td><span ng-class="{'glyphicon glyphicon-ok': item.Estado == '1',
-                                'glyphicon glyphicon-remove': item.Estado == '0'}"></span>
-                            </td>
-                            <td>
-                                <button class="btn btn-primary" ng-click="vmCombo.getComboOne(item.idCombo)">Editar</button>
-                            </td>
-                            <td>
-                                <button ng-click="vmCombo.getComboDetail(item)" class="btn btn-success"  data-toggle="modal" data-target="#myModal" role="button">Detalle</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                Búsqueda:
+                <input type="text" name="busqueda" ng-model="busqueda.Nombre" class="form-control" placeholder="Ingrese nombre del combo">
             </div>
+            <table class="table table-striped" id="tableCombo">
+                <thead>    
+                    <!-- On rows -->
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Valor</th>
+                        <th>Estado</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <!-- On cells (`td` or `th`) -->
+                <tbody>
+                    <tr ng-repeat="item in vmCombo.items | filter:busqueda | orderBy:columna: reverse">
+                        <td>{{item.Nombre}}</td>
+                        <td>{{item.Valor | currency }}</td>
+                        <td><span ng-class="{'glyphicon glyphicon-ok': item.Estado == '1',
+                            'glyphicon glyphicon-remove': item.Estado == '0'}"></span>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary" ng-click="vmCombo.getComboOne(item.idCombo)">Editar</button>
+                        </td>
+                        <td>
+                            <button ng-click="vmCombo.getComboDetail(item)" class="btn btn-success"  data-toggle="modal" data-target="#myModal" role="button">Detalle</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- pager -->
+            <ul ng-if="vmCombo.pager.pages.length" class="pagination">
+                <li ng-class="{disabled:vmCombo.pager.currentPage === 1}">
+                    <a ng-click="vmCombo.setPage(1)">First</a>
+                </li>
+                <li ng-class="{disabled:vmCombo.pager.currentPage === 1}">
+                    <a ng-click="vmCombo.setPage(vmCombo.pager.currentPage - 1)">Previous</a>
+                </li>
+                <li ng-repeat="page in vmCombo.pager.pages" ng-class="{active:vmCombo.pager.currentPage === page}">
+                    <a ng-click="vmCombo.setPage(page)">{{page}}</a>
+                </li>
+                <li ng-class="{disabled:vmCombo.pager.currentPage === vmCombo.pager.totalPages}">
+                    <a ng-click="vmCombo.setPage(vmCombo.pager.currentPage + 1)">Next</a>
+                </li>
+                <li ng-class="{disabled:vmCombo.pager.currentPage === vmCombo.pager.totalPages}">
+                    <a ng-click="vmCombo.setPage(vmCombo.pager.totalPages)">Last</a>
+                </li>
+            </ul>
         </div>
         <!-- formulario -->
         <div class="col-md-4">
@@ -57,7 +77,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label btn btn-default">
-                        Activo <input type="checkbox" ng-model="vmCombo.dataCombo.Estado" required>
+                        Activo <input type="checkbox" ng-model="vmCombo.dataCombo.Estado">
                     </label>
                 </div>
                 <button type="submit" class="btn btn-primary"> {{vmCombo.btnAction}}</button>

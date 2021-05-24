@@ -3,6 +3,10 @@
     <hr>
     <div class="row container">
         <div class="col-md-8">
+            <div class="row">
+                Búsqueda:
+                <input type="text" name="busqueda" ng-model="busqueda.Cedula" class="form-control" placeholder="Ingrese número de cédula">
+            </div>
             <table class="table table-striped" id="tableUser">
                 <thead>    
                     <!-- On rows -->
@@ -19,7 +23,7 @@
                 </thead>
                 <!-- On cells (`td` or `th`) -->
                 <tbody>
-                    <tr ng-repeat="item in vmUser.master.ListUser | filter:busqueda | orderBy:columna: reverse">
+                    <tr ng-repeat="item in vmUser.items | filter:busqueda | orderBy:columna: reverse">
                         <td>{{item.Nombre}}</td>
                         <td>{{item.Edad}}</td>
                         <td>{{item.Cedula}}</td>
@@ -34,6 +38,24 @@
                     </tr>
                 </tbody>
             </table>
+             <!-- pager -->
+            <ul ng-if="vmUser.pager.pages.length" class="pagination">
+                <li ng-class="{disabled:vmUser.pager.currentPage === 1}">
+                    <a ng-click="vmUser.setPage(1)">First</a>
+                </li>
+                <li ng-class="{disabled:vmUser.pager.currentPage === 1}">
+                    <a ng-click="vmUser.setPage(vmUser.pager.currentPage - 1)">Previous</a>
+                </li>
+                <li ng-repeat="page in vmUser.pager.pages" ng-class="{active:vmUser.pager.currentPage === page}">
+                    <a ng-click="vmUser.setPage(page)">{{page}}</a>
+                </li>
+                <li ng-class="{disabled:vmUser.pager.currentPage === vmUser.pager.totalPages}">
+                    <a ng-click="vmUser.setPage(vmUser.pager.currentPage + 1)">Next</a>
+                </li>
+                <li ng-class="{disabled:vmUser.pager.currentPage === vmUser.pager.totalPages}">
+                    <a ng-click="vmUser.setPage(vmUser.pager.totalPages)">Last</a>
+                </li>
+            </ul>
         </div>
         <div class="col-md-4">
 
@@ -60,8 +82,8 @@
                 </div>
                 <div class="form-group">
                     <label for="Edad" class="control-label">Edad</label>
-                    <input type="text" id="Edad" class="form-control" name="Edad"
-                        ng-model="vmUser.dataUser.Edad" required>
+                    <input type="number" id="Edad" class="form-control" name="Edad"
+                        ng-model="vmUser.dataUser.Edad" min='18' required >
                 </div>
                 <div class="form-group">
                     <label for="Correo" class="control-label">Correo</label>
@@ -70,8 +92,8 @@
                 </div>
                 <div class="form-group">
                     <label for="Celular" class="control-label">Celular</label>
-                    <input type="text" id="Celular" class="form-control" name="Celular"
-                        ng-model="vmUser.dataUser.Celular" required>
+                    <input type="number" id="Celular" class="form-control" name="Celular"
+                        ng-model="vmUser.dataUser.Celular" type="number" required>
                 </div>
                 <div class="form-group">
                     <select name="rol" class="form-control" ng-model="vmUser.dataUser.Rol_idRol">

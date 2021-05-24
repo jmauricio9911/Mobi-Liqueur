@@ -5,15 +5,15 @@
         <div class="col-md-8">
             <div>
                 Búsqueda:
-                <input type="text" name="busqueda" ng-model="busqueda.Nombre" class="form-control" placeholder="Ingrese lo que desea buscar">
-                <br> Estado:
+                <input type="text" name="busqueda" ng-model="busqueda.Nombre" class="form-control" placeholder="Ingrese el producto que desea buscar">
                 <br>
+                <!-- <br> Estado:
                 <select ng-model="busqueda.Estado" class="form-control">
                     <option value="">Cualquiera</option>
                     <option value="0">Activo</option>
                     <option value="1">Inactivo</option>
                 </select>
-                <br>
+                <br> -->
                 <table class="table table-striped" id="tableProduct">
                     <thead>
                         <!-- On rows -->
@@ -21,16 +21,18 @@
                             <th>Nombre</th>
                             <th>Cantidad</th>
                             <th>Valor unitario</th>
+                            <th>Fecha vencimiento</th>
                             <th>Estado</th>
                             <th></th>
                         </tr>
                     </thead>
                     <!-- On cells (`td` or `th`) -->
                     <tbody>
-                        <tr ng-repeat="item in vmAdminProducts.master.ListProducts | filter:busqueda | orderBy:columna: reverse">
+                        <tr ng-repeat="item in vmAdminProducts.items | filter:busqueda | orderBy:columna: reverse">
                             <td>{{item.Nombre}}</td>
                             <td>{{item.Cantidad}}</td>
                             <td>{{item.ValorUnitario | currency:"$":0}}</td>
+                            <td>{{item.FechaVencimiento  | date:'yyyy-MM-dd'}}</td>
                             <td><span ng-class="{'glyphicon glyphicon-ok': item.Estado == '1',
                                 'glyphicon glyphicon-remove': item.Estado == '0'}"></span></td>
                             <td><button class="btn btn-primary"
@@ -40,6 +42,24 @@
                         </tr>
                     </tbody>
                 </table>
+                <!-- pager -->
+                <ul ng-if="vmAdminProducts.pager.pages.length" class="pagination">
+                    <li ng-class="{disabled:vmAdminProducts.pager.currentPage === 1}">
+                        <a ng-click="vmAdminProducts.setPage(1)">First</a>
+                    </li>
+                    <li ng-class="{disabled:vmAdminProducts.pager.currentPage === 1}">
+                        <a ng-click="vmAdminProducts.setPage(vmAdminProducts.pager.currentPage - 1)">Previous</a>
+                    </li>
+                    <li ng-repeat="page in vmAdminProducts.pager.pages" ng-class="{active:vmAdminProducts.pager.currentPage === page}">
+                        <a ng-click="vmAdminProducts.setPage(page)">{{page}}</a>
+                    </li>
+                    <li ng-class="{disabled:vmAdminProducts.pager.currentPage === vmAdminProducts.pager.totalPages}">
+                        <a ng-click="vmAdminProducts.setPage(vmAdminProducts.pager.currentPage + 1)">Next</a>
+                    </li>
+                    <li ng-class="{disabled:vmAdminProducts.pager.currentPage === vmAdminProducts.pager.totalPages}">
+                        <a ng-click="vmAdminProducts.setPage(vmAdminProducts.pager.totalPages)">Last</a>
+                    </li>
+                </ul>
             </div>
         </div>
         <div class="col-md-4">
@@ -48,7 +68,7 @@
                 novalidate="novalidate">
                 <div class="form-group" ng-show="vmAdminProducts.Formulario">
                     <label for="id" class="control-label">Identificador</label>
-                    <input type="text" id="id" class="form-control" name="id" ng-model="vmAdminProducts.dataProducts.id"
+                    <input type="text" id="id" class="form-control" name="id" ng-model="vmAdminProducts.dataProducts.idProducto"
                         disabled>
                 </div>
 
@@ -65,26 +85,26 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="edad" class="control-label">ValorUnitario</label>
+                    <label for="edad" class="control-label">Valor unitario</label>
                     <input type="number" id="edad" class="form-control"
                         ng-model="vmAdminProducts.dataProducts.ValorUnitario" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="edad" class="control-label">NombreImagen</label>
+                    <label for="edad" class="control-label">Imagen</label>
                     <input type="file" id="edad" ng-model="vmAdminProducts.dataProducts.NombreImagen" required>
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label btn btn-default">
-                        Activo <input type="checkbox" ng-model="vmAdminProducts.dataProducts.Estado" required>
-                    </label>
+                    <label for="FechaVencimiento" class="control-label">Fecha vencimiento</label>
+                    <input type="date" id="FechaVencimiento" class="form-control" name="FechaVencimiento"
+                    ng-model="vmAdminProducts.dataProducts.FechaVencimiento" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="email" class="control-label">FechaVencimiento</label>
-                    <input type="date" id="email" class="form-control" name="email"
-                        ng-model="vmAdminProducts.dataProducts.FechaVencimiento" required>
+                    <label class="control-label btn btn-default">
+                        Activo <input type="checkbox" ng-model="vmAdminProducts.dataProducts.Estado">
+                    </label>
                 </div>
 
                 <button type="submit" class="btn btn-primary"> {{vmAdminProducts.btnAction}}</button>
