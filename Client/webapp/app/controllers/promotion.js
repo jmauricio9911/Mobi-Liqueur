@@ -2,9 +2,9 @@ angular.module('app.Promotion', ['jcs-autoValidate', 'app.global'])
     .controller('cvPromotion', cvPromotion);
 
 /*Injeccion de dependencia*/
-cvPromotion.$inject = ['masterData', 'global'];
+cvPromotion.$inject = ['masterData', '$scope', 'global'];
 
-function cvPromotion(masterData, global) {
+function cvPromotion(masterData, $scope, global) {
     /*Miembros del controlador*/
     var cvPromotion = this;
 
@@ -13,18 +13,32 @@ function cvPromotion(masterData, global) {
 
     cvPromotion.init = function() {
         //Funcion inicial 
+        cvPromotion.products = [];
         cvPromotion.master = [];
         cvPromotion.master.ListPromotions = []; //Promosiones
         cvPromotion.Promotions = []; //Promosiones
         cvPromotion.Formulario = false; //Manejo de formulario
-        getPromotionsList();
         cvPromotion.getPromotionOne = getPromotionOne;
-        cvPromotion.savedata = savedata;
+        cvPromotion.saveData = saveData;
+        cvPromotion.clearForm = clearForm;
+        cvPromotion.btnAction = 'Guardar';
+        getProducts();
+        getPromotionsList();
         validateDataTable();
     };
 
     function goToPage(page) {
         location.href = "#" + page;
+    }
+
+    function getProducts() {
+        cvPromotion.products = []
+        masterData.getData('api/producto')
+            .then(function(data) {
+                data.data.forEach(element => {
+                    cvPromotion.products.push(element)
+                });
+            });
     }
 
     // Funcion para obtener lista de promociones
@@ -42,24 +56,71 @@ function cvPromotion(masterData, global) {
         cvPromotion.Formulario = true; //Manejo de formulario
         masterData.getPromotionsOne(id)
             .then(function(data) {
-                cvPromotion.Promotions = data.data
-                console.log(cvPromotion.Promotions)
+                cvPromotion.Promotions = data.data;
+                cvPromotion.Promotions.FechaInicio = convertFormat(data.data.FechaInicio);
+                cvPromotion.Promotions.FechaFin = convertFormat(data.data.FechaFin);
+                cvPromotion.btnAction = 'Actualizar';
             });
     }
 
-    //Funcion para guardar datos
-    function savedata(data) {
-        masterData.UpdatePromotions(data.idPromocion, data)
-            .then(function(data) {
+    function clearForm() {
+        cvPromotion.Promotions = []
+        cvPromotion.Formulario = false; //Manejo de formulario
+        cvPromotion.btnAction = 'Guardar'
+        $scope.$apply();
+    }
+
+    function convertFormat(date){
+        let newDate = new Date(date)
+        let formatted_date = newDate.getFullYear() + "-" + ("0" + (newDate.getMonth() + 1)).slice(-2) + "-" + newDate.getDate();
+        return formatted_date;
+    }
+
+    //Función para guardar datos
+    function saveData(dataPromotion) {
+        if (Object.keys(dataPromotion).length > 0) {
+            if (dataPromotion.idPromocion) {
+                updateData(dataPromotion)
+            } else {
+                var object = {
+                    "Producto_idProducto": dataPromotion.Producto_idProducto,
+                    "Descuento": dataPromotion.Descuento,
+                    "FechaInicio": dataPromotion.FechaInicio,
+                    "FechaFin": dataPromotion.FechaFin,
+                }
+                masterData.send('api/promotions/', object)
+                    .then(function (data) {
+                        if (data.data.message) {
+                            swal("Exito", data.data.message, "success");
+                            getPromotionsList();
+                            clearForm();
+
+                        } else {
+                            swal('Error');
+                        }
+                    });
+            }
+        } else {
+            //  validation
+            swal("Error", 'Debe llenar el formulario', "error");
+        }
+    }
+
+    //Función para actualizar datos
+    function updateData(dataPromotion) {
+        delete dataPromotion['Nombre'];
+        masterData.UpdateData('api/promotions/' + dataPromotion.idPromocion, dataPromotion)
+            .then(function (data) {
                 if (data.data.message) {
                     swal("Exito", data.data.message, "success");
+                    getPromotionsList();
+                    clearForm();
                 } else {
                     swal('Error');
                 }
-
             });
-
     }
+
     /**
      * @Funcion : configDatatable
      * @Descripcion : Configuracion basica para dataTable en español ect.
