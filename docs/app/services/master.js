@@ -19,8 +19,7 @@ function masterData($http, $rootScope) {
     // const URL = window.location.href.split("/webapp")[0] + "/myDestination";
 
     // Local
-    // const URL = "http://localhost:3000/";
-    const URl = "http://c9dd6dc7d928.ngrok.io/"
+    const URL = "http://c9dd6dc7d928.ngrok.io/";
 
     var service = {
         getLoginByID: getLoginByID,
