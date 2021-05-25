@@ -1,0 +1,106 @@
+<div class="container-fluid" ng-init="cvPromotion.init()">
+
+    <h3>Administrar promociones</h3>
+    <hr>
+
+    <div class="row container">
+        <!-- tabla -->
+        <div class="col-md-8">
+            <div class="row">
+                Búsqueda:
+                <input type="text" name="busqueda" ng-model="busqueda.Nombre" class="form-control" placeholder="Ingrese lo que desea buscar">
+                <!-- <br> Estado:
+                <br>
+                <select ng-model="busqueda.Estado" class="form-control">
+                    <option value="">Cualquiera</option>
+                    <option value="0">Activo</option>
+                    <option value="1">Inactivo</option>
+                </select>
+                <br> -->
+            </div>
+
+            <table class="table table-striped" id="promotions">
+                <thead>
+                    <tr>
+                        <th scope="col">Indicador</th>
+                        <th scope="col">Descuento</th>
+                        <th scope="col">Producto</th>
+                        <th scope="col">Fecha inicio</th>
+                        <th scope="col">Fecha fin</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="promotion in cvPromotion.items | filter:busqueda | orderBy:columna: reverse ">
+                        <th>{{promotion.idPromocion}}</th>
+                        <td>{{promotion.Descuento}} %</td>
+                        <td>{{promotion.Nombre}}</td>
+                        <td>{{promotion.FechaInicio | date:"dd/MM/yyyy" }}</td>
+                        <td>{{promotion.FechaFin | date:"dd/MM/yyyy" }}</td>
+                        <td><span ng-class="{'glyphicon glyphicon-remove': promotion.Estado == '1',
+                                               'glyphicon glyphicon-ok': promotion.Estado == '0'}"></span></td>
+                        <td> <button class="btn btn-primary" ng-click="cvPromotion.getPromotionOne(promotion.idPromocion)">Detalle</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- pager -->
+            <ul ng-if="cvPromotion.pager.pages.length" class="pagination">
+                <li ng-class="{disabled:cvPromotion.pager.currentPage === 1}">
+                    <a ng-click="cvPromotion.setPage(1)">First</a>
+                </li>
+                <li ng-class="{disabled:cvPromotion.pager.currentPage === 1}">
+                    <a ng-click="cvPromotion.setPage(cvPromotion.pager.currentPage - 1)">Previous</a>
+                </li>
+                <li ng-repeat="page in cvPromotion.pager.pages" ng-class="{active:cvPromotion.pager.currentPage === page}">
+                    <a ng-click="cvPromotion.setPage(page)">{{page}}</a>
+                </li>
+                <li ng-class="{disabled:cvPromotion.pager.currentPage === cvPromotion.pager.totalPages}">
+                    <a ng-click="cvPromotion.setPage(cvPromotion.pager.currentPage + 1)">Next</a>
+                </li>
+                <li ng-class="{disabled:cvPromotion.pager.currentPage === cvPromotion.pager.totalPages}">
+                    <a ng-click="cvPromotion.setPage(cvPromotion.pager.totalPages)">Last</a>
+                </li>
+            </ul>
+        </div>
+        <!-- formulario -->
+        <div class="col-md-4">
+
+            <form name="formulario" ng-submit="cvPromotion.saveData(cvPromotion.Promotions)" novalidate="novalidate">
+
+                <div class="form-group" ng-show="cvPromotion.Formulario">
+                    <label for="nombre" class="control-label">Indicador</label>
+                    <input type="text" id="nombre" class="form-control" name="nombre" ng-model="cvPromotion.Promotions.idPromocion" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Producto</label>
+                    <select name="rol" class="form-control" ng-model="cvPromotion.Promotions.Producto_idProducto">
+                        <option ng-repeat="option in cvPromotion.products" value="{{option.idProducto}}">{{option.Nombre}}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="edad" class="control-label">Descuento (%)</label>
+                    <input type="number" id="edad" class="form-control" ng-model="cvPromotion.Promotions.Descuento" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="genero" class="control-label">Fecha inicio</label>
+                    <input type="date" id="email" class="form-control" name="email" ng-model="cvPromotion.Promotions.FechaInicio" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="control-label">Fecha fin</label>
+                    <input type="date" id="email" class="form-control" name="email" ng-model="cvPromotion.Promotions.FechaFin" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary"> {{cvPromotion.btnAction}}</button>
+                <button type="reset" class="btn btn-default" ng-click="cvPromotion.clearForm()" ng-show="cvPromotion.Formulario"> Cancelar</button>
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

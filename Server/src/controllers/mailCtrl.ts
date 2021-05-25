@@ -12,8 +12,8 @@ class EmialController {
             var transporter = nodemailer.createTransport({
                 service: 'Gmail',
                 auth: {
-                    user: 'tuemail@gmail.com',
-                    pass: '********'
+                    user: 'mauriciozabaleta123@gmail.com',
+                    pass: '26147103'
                 }
             });
             //Cabecera del correo
@@ -52,7 +52,12 @@ class EmialController {
                 console.log(res);
             }
         });
-        sendEmail(req, res, req.body.correo, req.body.asunto);
+        const correo = req.body.correo;
+        setTimeout(TiempoEspera => {
+            console.log(correo);
+             sendEmail(req, res, correo , req.body.asunto);
+        }, 3000);
+        
     }
     public async sendRestore(req: Request, res: Response): Promise<any> {
         let sendEmail = function (req: any, res: any, emails: any, asunto: any) {

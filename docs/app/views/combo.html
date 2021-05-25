@@ -1,0 +1,181 @@
+<div class="container-fluid" ng-init="vmCombo.init()">
+    <h3>Administrar de combos</h3>
+    <hr>
+    <div class="row container">
+        <!-- tabla -->
+        <div class="col-md-8">
+            <div class="row">
+                Búsqueda:
+                <input type="text" name="busqueda" ng-model="busqueda.Nombre" class="form-control" placeholder="Ingrese nombre del combo">
+            </div>
+            <table class="table table-striped" id="tableCombo">
+                <thead>    
+                    <!-- On rows -->
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Valor</th>
+                        <th>Estado</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <!-- On cells (`td` or `th`) -->
+                <tbody>
+                    <tr ng-repeat="item in vmCombo.items | filter:busqueda | orderBy:columna: reverse">
+                        <td>{{item.Nombre}}</td>
+                        <td>{{item.Valor | currency }}</td>
+                        <td><span ng-class="{'glyphicon glyphicon-ok': item.Estado == '1',
+                            'glyphicon glyphicon-remove': item.Estado == '0'}"></span>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary" ng-click="vmCombo.getComboOne(item.idCombo)">Editar</button>
+                        </td>
+                        <td>
+                            <button ng-click="vmCombo.getComboDetail(item)" class="btn btn-success"  data-toggle="modal" data-target="#myModal" role="button">Detalle</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- pager -->
+            <ul ng-if="vmCombo.pager.pages.length" class="pagination">
+                <li ng-class="{disabled:vmCombo.pager.currentPage === 1}">
+                    <a ng-click="vmCombo.setPage(1)">First</a>
+                </li>
+                <li ng-class="{disabled:vmCombo.pager.currentPage === 1}">
+                    <a ng-click="vmCombo.setPage(vmCombo.pager.currentPage - 1)">Previous</a>
+                </li>
+                <li ng-repeat="page in vmCombo.pager.pages" ng-class="{active:vmCombo.pager.currentPage === page}">
+                    <a ng-click="vmCombo.setPage(page)">{{page}}</a>
+                </li>
+                <li ng-class="{disabled:vmCombo.pager.currentPage === vmCombo.pager.totalPages}">
+                    <a ng-click="vmCombo.setPage(vmCombo.pager.currentPage + 1)">Next</a>
+                </li>
+                <li ng-class="{disabled:vmCombo.pager.currentPage === vmCombo.pager.totalPages}">
+                    <a ng-click="vmCombo.setPage(vmCombo.pager.totalPages)">Last</a>
+                </li>
+            </ul>
+        </div>
+        <!-- formulario -->
+        <div class="col-md-4">
+
+            <form name="formulario" ng-submit="vmCombo.saveData(vmCombo.dataCombo)" novalidate="novalidate">
+                <div class="form-group" ng-show="vmCombo.Formulario">
+                    <label for="id" class="control-label">Identificador</label>
+                    <input type="text" id="id" class="form-control" name="id"
+                        ng-model="vmCombo.dataCombo.idCombo" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label for="nombre" class="control-label">Nombre</label>
+                    <input type="text" id="nombre" class="form-control" name="nombre"
+                        ng-model="vmCombo.dataCombo.Nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="Valor" class="control-label">Valor</label>
+                    <input type="text" id="Valor" class="form-control" name="Valor"
+                        ng-model="vmCombo.dataCombo.Valor" required>
+                </div>
+                <div class="form-group">
+                    <label class="control-label btn btn-default">
+                        Activo <input type="checkbox" ng-model="vmCombo.dataCombo.Estado">
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary"> {{vmCombo.btnAction}}</button>
+                <button type="reset" class="btn btn-default" ng-click="vmCombo.clearForm()" ng-show="vmCombo.Formulario"> Cancelar</button>
+            </form>
+
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Detalle de combo</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-md-12">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Valor</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{vmCombo.dataComboDetail.Nombre}}</td>
+                                        <td>{{vmCombo.dataComboDetail.Valor | currency:"$":0}}</td>
+                                        <td><span ng-class="{'glyphicon glyphicon-ok': vmCombo.dataComboDetail.Estado == '1',
+                                            'glyphicon glyphicon-remove': item.Estado == '0'}"></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        </br>
+                        <label>Detalle de productos</label>
+                        <div class="col-md-12">
+                            <form name="formulario" ng-submit="vmCombo.saveDataDetail(vmCombo.dataComboProducto)" novalidate="novalidate">
+                                <div class="col-md-6 form-group" ng-show="false">
+                                    <label for="id" class="control-label">Identificador</label>
+                                    <input type="text" id="id" class="form-control" name="id"
+                                        ng-model="vmCombo.dataComboProducto.id" disabled>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label class="control-label">Producto</label>
+                                    <select name="rol" class="form-control" ng-model="vmCombo.dataComboProducto.Producto_idProducto">
+                                        <option ng-repeat="option in vmCombo.products" value="{{option.idProducto}}">{{option.Nombre}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label class="control-label">Cantidad</label>
+                                    <input type="text" class="form-control" ng-model="vmCombo.dataComboProducto.Cantidad">
+                                </div>
+                                <button type="submit" class="btn btn-primary"> {{vmCombo.btnActionDetail}}</button>
+                                <button type="reset" class="btn btn-default" ng-click="vmCombo.clearFormDetail()"> Cancelar</button>
+                            </form>
+                        </div>
+                        <table class="table table-striped" id="tableSale">
+                            <thead>
+                                <!-- On rows -->
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th></th>
+                                    <th></th>
+                                    <!-- <th>Valor</th> -->
+                                </tr>
+                            </thead>
+                            <!-- On cells (`td` or `th`) -->
+                            <tbody>
+                                <tr ng-repeat="item in vmCombo.master.ListDetailCombo | filter:busqueda | orderBy:columna: reverse">
+                                    <td>{{item.Nombre}}</td>
+                                    <td>{{item.Cantidad}}</td>
+                                    <td>
+                                        <button class="btn btn-primary" ng-click="vmCombo.getComboProduct(item)">Editar</button>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger" ng-click="vmCombo.removeComboProduct(item.id)">Eliminar</button>
+                                    </td>
+                                    <!-- <td>{{item.valor | currency:"$":0}}</td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <script type="text/javascript">
+    $(document).ready(function()
+    {
+        $('#tableCombo').dataTable();
+    });
+</script> -->
